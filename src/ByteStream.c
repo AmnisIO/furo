@@ -69,10 +69,9 @@ static void _add (ByteStream *stream, ByteListenerInternal *listener) {
   }
 }
 
-static void *_stop_stream (void *any) {
+static void _stop_stream (void *any) {
   ByteStream *stream = (ByteStream *)any;
   stream->_stop_now(stream);
-  return NULL;
 }
 
 static void _remove (ByteStream *stream, ByteListenerInternal *listener) {
