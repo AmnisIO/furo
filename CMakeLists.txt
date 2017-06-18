@@ -8,9 +8,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 file(GLOB src "src/*.c")
 file(GLOB tests "tests/*.c")
 
-include(GenerateExportHeader)
+add_library(rivulet ${src})
 
-add_library(furo ${src})
-
-add_executable(furo_test ${tests})
-target_link_libraries(furo_test LINK_PUBLIC furo)
+add_executable(rivulet_test ${tests})
+target_link_libraries(rivulet_test LINK_PUBLIC furo)
