@@ -14,6 +14,3 @@ add_library(furo ${src})
 
 add_executable(furo_test ${tests})
 target_link_libraries(furo_test LINK_PUBLIC furo)
-
-generate_export_header(furo)
-set_property(TARGET furo PROPERTY VERSION ${furo_version})
