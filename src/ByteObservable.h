@@ -1,5 +1,5 @@
-#ifndef C_BYTEOBSERVABLE_H
-#define C_BYTEOBSERVABLE_H
+#ifndef RIVULET_BYTEOBSERVABLE_H
+#define RIVULET_BYTEOBSERVABLE_H
 
 typedef enum ByteObservableType {
   OBSERVABLE_TYPE_UNKNOWN,
@@ -14,4 +14,4 @@ typedef struct ByteObservable {
   enum ByteObservableType type;
 } ByteObservable;
 
-#endif //C_BYTEOBSERVABLE_H
+#endif //RIVULET_BYTEOBSERVABLE_H

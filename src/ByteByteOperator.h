@@ -1,5 +1,5 @@
-#ifndef C_BYTEBYTEOPERATOR_H
-#define C_BYTEBYTEOPERATOR_H
+#ifndef RIVULET_BYTEBYTEOPERATOR_H
+#define RIVULET_BYTEBYTEOPERATOR_H
 
 #include "ByteProducerInternal.h"
 #include "ByteStream.h"
@@ -24,4 +24,4 @@ typedef struct ByteByteOperator {
 ByteByteOperator *byte_byte_operator_create ();
 void byte_byte_operator_initialize (ByteByteOperator *operator);
 
-#endif //C_BYTEBYTEOPERATOR_H
+#endif //RIVULET_BYTEBYTEOPERATOR_H

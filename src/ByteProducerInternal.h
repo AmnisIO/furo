@@ -1,5 +1,5 @@
-#ifndef C_BYTEPRODUCERINTERNAL_H
-#define C_BYTEPRODUCERINTERNAL_H
+#ifndef RIVULET_BYTEPRODUCERINTERNAL_H
+#define RIVULET_BYTEPRODUCERINTERNAL_H
 
 #include "ByteListenerInternal.h"
 #include "ByteObservable.h"
@@ -13,4 +13,4 @@ typedef struct ByteProducerInternal {
 typedef void (*byte_producer_internal_start) (struct ByteProducerInternal *self, struct ByteListenerInternal *listener);
 typedef void (*byte_producer_internal_stop) (struct ByteProducerInternal *self);
 
-#endif // C_BYTEPRODUCERINTERNAL_H
+#endif // RIVULET_BYTEPRODUCERINTERNAL_H

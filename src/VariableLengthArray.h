@@ -1,5 +1,5 @@
-#ifndef C_VARIABLELENGTHARRAY_H
-#define C_VARIABLELENGTHARRAY_H
+#ifndef RIVULET_VARIABLELENGTHARRAY_H
+#define RIVULET_VARIABLELENGTHARRAY_H
 
 #include "utils.h"
 #include "Boolean.h"
@@ -25,4 +25,4 @@ typedef struct VariableLengthArray {
 void variable_length_array_initialize (VariableLengthArray **array);
 VariableLengthArray *variable_length_array_create ();
 
-#endif // C_VARIABLELENGTHARRAY_H
+#endif // RIVULET_VARIABLELENGTHARRAY_H

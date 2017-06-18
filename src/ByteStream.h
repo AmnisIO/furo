@@ -1,5 +1,5 @@
-#ifndef C_BYTESTREAM_H
-#define C_BYTESTREAM_H
+#ifndef RIVULET_BYTESTREAM_H
+#define RIVULET_BYTESTREAM_H
 
 #include "ByteListener.h"
 #include "ByteProducer.h"
@@ -42,4 +42,4 @@ ByteStream *byte_stream_empty ();
 ByteStream *byte_stream_from_variable_length_array (VariableLengthArray *array);
 ByteStream *byte_stream_from_array (Byte array[], int size);
 
-#endif // C_BYTESTREAM_H
+#endif // RIVULET_BYTESTREAM_H

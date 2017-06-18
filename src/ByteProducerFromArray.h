@@ -1,5 +1,5 @@
-#ifndef C_BYTEPRODUCERFROMARRAY_H
-#define C_BYTEPRODUCERFROMARRAY_H
+#ifndef RIVULET_BYTEPRODUCERFROMARRAY_H
+#define RIVULET_BYTEPRODUCERFROMARRAY_H
 
 
 #include "ByteProducer.h"
@@ -16,4 +16,4 @@ typedef struct ByteProducerFromArray {
 
 ByteProducer *byte_producer_from_variable_length_array(VariableLengthArray *array);
 ByteProducer *byte_producer_from_array(Byte array[], int size);
-#endif //C_BYTEPRODUCERFROMARRAY_H
+#endif //RIVULET_BYTEPRODUCERFROMARRAY_H

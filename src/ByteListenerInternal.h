@@ -1,5 +1,5 @@
-#ifndef C_BYTELISTENERINTERNAL_H
-#define C_BYTELISTENERINTERNAL_H
+#ifndef RIVULET_BYTELISTENERINTERNAL_H
+#define RIVULET_BYTELISTENERINTERNAL_H
 
 #include "Byte.h"
 #include "utils.h"
@@ -16,4 +16,4 @@ typedef void (*byte_listener_internal_next) (struct ByteListenerInternal *self, 
 typedef void (*byte_listener_internal_error) (struct ByteListenerInternal *self, int e);
 typedef void (*byte_listener_internal_complete) (struct ByteListenerInternal *self);
 
-#endif //C_BYTELISTENERINTERNAL_H
+#endif //RIVULET_BYTELISTENERINTERNAL_H

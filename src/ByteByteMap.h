@@ -1,5 +1,5 @@
-#ifndef C_BYTEBYTEMAP_H
-#define C_BYTEBYTEMAP_H
+#ifndef RIVULET_BYTEBYTEMAP_H
+#define RIVULET_BYTEBYTEMAP_H
 
 #include "ByteByteOperator.h"
 typedef Byte (*byte_byte_map_function)(Byte value);
@@ -19,4 +19,4 @@ typedef struct ByteByteMap {
 
 ByteByteMap *byte_byte_map_create(ByteStream *in, byte_byte_map_function map);
 
-#endif //C_BYTEBYTEMAP_H
+#endif //RIVULET_BYTEBYTEMAP_H

@@ -1,5 +1,5 @@
-#ifndef C_BYTELISTENER_H
-#define C_BYTELISTENER_H
+#ifndef RIVULET_BYTELISTENER_H
+#define RIVULET_BYTELISTENER_H
 
 #include "ByteListenerInternal.h"
 
@@ -20,4 +20,4 @@ typedef void (*byte_listener_complete) (struct ByteListener *self);
 ByteListener *
 byte_listener_create (byte_listener_next next, byte_listener_error error, byte_listener_complete complete);
 
-#endif //C_BYTELISTENER_H
+#endif //RIVULET_BYTELISTENER_H
