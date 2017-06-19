@@ -41,5 +41,6 @@ ByteStream *byte_stream_never ();
 ByteStream *byte_stream_empty ();
 ByteStream *byte_stream_from_variable_length_array (VariableLengthArray *array);
 ByteStream *byte_stream_from_array (Byte array[], int size);
+ByteStream *byte_stream_periodic (int period);
 
 #endif // RIVULET_BYTESTREAM_H
