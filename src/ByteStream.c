@@ -2,6 +2,7 @@
 #include "ByteByteMap.h"
 #include "ByteStreamTimer.h"
 #include "ByteProducerPeriodic.h"
+#include "ByteMapTo.h"
 
 int STOP_ID_NONE = 0;
 
@@ -119,6 +120,7 @@ static ByteSubscription *_subscribe (ByteStream *stream, ByteListener *listener)
   return (ByteSubscription *) subscription;
 }
 static ByteStream *_map (ByteStream *self, byte_byte_map_function map);
+static ByteStream *_map_to (ByteStream *self, Byte value);
 
 static ByteStream *_create (ByteProducerInternal *producer) {
   ByteStream *stream = xmalloc (sizeof (ByteStream));
@@ -138,11 +140,16 @@ static ByteStream *_create (ByteProducerInternal *producer) {
   stream->remove_listener = _remove_listener;
   stream->subscribe = _subscribe;
   stream->map = _map;
+  stream->map_to = _map_to;
   return stream;
 }
 
 static ByteStream *_map (ByteStream *self, byte_byte_map_function map) {
   return _create ((ByteProducerInternal *) byte_byte_map_create (self, map));
+}
+
+static ByteStream *_map_to (ByteStream *self, Byte value) {
+  return _create ((ByteProducerInternal *) byte_map_to_create (self, value));
 }
 
 ByteStream *byte_stream_create (ByteProducer *producer) {

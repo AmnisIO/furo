@@ -29,7 +29,7 @@ typedef struct ByteStream {
   void (*remove_listener) (struct ByteStream *self, ByteListener *listener);
   ByteSubscription *(*subscribe) (struct ByteStream *self, ByteListener *listener);
   struct ByteStream *(*map) (struct ByteStream *self, byte_steam_map_function map);
-  struct ByteStream *(*mapTo) (struct ByteStream *self, Byte value);
+  struct ByteStream *(*map_to) (struct ByteStream *self, Byte value);
   struct ByteStream *(*filter) (struct ByteStream *self, byte_steam_filter_function filter);
   struct ByteStream *(*take) (struct ByteStream *self, int count);
   struct ByteStream *(*drop) (struct ByteStream *self, int count);
