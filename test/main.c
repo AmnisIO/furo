@@ -31,5 +31,9 @@ int main () {
   ByteStream *stream_periodic = byte_stream_periodic (40);
   printf ("stream_periodic_created\n");
   stream_periodic->add_listener(stream_periodic, listener);
+  Byte nine_to_twelve[4] = {9,10,11,12};
+  ByteStream *stream_4 = byte_stream_from_array (nine_to_twelve, 4);
+  ByteStream *stream_map_to = stream_4->map_to(stream_4, 10);
+  stream_map_to->add_listener(stream_map_to, listener);
   return 0;
 }
