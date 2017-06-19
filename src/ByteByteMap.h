@@ -2,6 +2,7 @@
 #define RIVULET_BYTEBYTEMAP_H
 
 #include "ByteByteOperator.h"
+
 typedef Byte (*byte_byte_map_function)(Byte value);
 
 typedef struct ByteByteMap {
