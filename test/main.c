@@ -28,5 +28,8 @@ int main () {
   ByteListener *listener = byte_listener_create (_next, _error, _complete);
   stream->add_listener (stream, listener);
   stream_3->add_listener (stream_3, listener);
+  ByteStream *stream_periodic = byte_stream_periodic (40);
+  printf ("stream_periodic_created\n");
+  stream_periodic->add_listener(stream_periodic, listener);
   return 0;
 }
