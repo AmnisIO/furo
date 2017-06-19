@@ -1,39 +1,110 @@
 #include "ByteStream.h"
 
-void _next (ByteListener *self, Byte v) {
-  printf ("%d\n", v);
+VariableLengthArray *array = NULL;
+ByteListener *listener = NULL;
+
+void _next (ByteListener *self, Byte value) {
+  array->push (array, (void *) value);
 }
 void _error (ByteListener *self, int error) {
-  printf ("%d\n", error);
+
 }
 void _complete (ByteListener *self) {
-  printf ("completed\n");
+
+}
+
+void initialize_tests () {
+  array = variable_length_array_create ();
+  listener = byte_listener_create (_next, _error, _complete);
+}
+
+void reset () {
+  array->clear (array);
 }
 
 Byte add_one (Byte value) {
   return value + (Byte) 1;
 }
 
-int main () {
+void test_from_varray () {
+  reset ();
+  printf ("TEST Stream<Byte>.fromVariableLengthArray() ");
   VariableLengthArray *one_to_four = variable_length_array_create ();
   int a = 1, b = 2, c = 3, d = 4;
-  Byte five_to_eight[4] = {5, 6, 7, 8};
   one_to_four->push (one_to_four, &a);
   one_to_four->push (one_to_four, &b);
   one_to_four->push (one_to_four, &c);
   one_to_four->push (one_to_four, &d);
   ByteStream *stream = byte_stream_from_variable_length_array (one_to_four);
-  ByteStream *stream_2 = byte_stream_from_array (five_to_eight, 4);
-  ByteStream *stream_3 = stream_2->map (stream_2, add_one);
-  ByteListener *listener = byte_listener_create (_next, _error, _complete);
   stream->add_listener (stream, listener);
-  stream_3->add_listener (stream_3, listener);
+  int length = array->length (array);
+  for (int i = 0; i < length; i++) {
+    Byte value = (Byte) array->get (array, i);
+    if (value == i + 1) continue;
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
+void test_from_array () {
+  reset ();
+  printf ("TEST Stream<Byte>.fromArray() ");
+  Byte five_to_eight[4] = {5, 6, 7, 8};
+  ByteStream *stream = byte_stream_from_array (five_to_eight, 4);
+  stream->add_listener (stream, listener);
+  int length = array->length (array);
+  for (int i = 0; i < length; i++) {
+    Byte value = (Byte) array->get (array, i);
+    if (value == i + 5) continue;
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
+void test_map () {
+  reset ();
+  printf ("TEST Stream<Byte>.map() ");
+  Byte five_to_eight[4] = {5, 6, 7, 8};
+  ByteStream *stream = byte_stream_from_array (five_to_eight, 4);
+  ByteStream *stream_map = stream->map (stream, add_one);
+  stream_map->add_listener (stream_map, listener);
+  int length = array->length (array);
+  for (int i = 0; i < length; i++) {
+    Byte value = (Byte) array->get (array, i);
+    if (value == i + 6) continue;
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
+void test_map_to () {
+  reset ();
+  printf ("TEST Stream<Byte>.mapTo() ");
+  Byte five_to_eight[4] = {5, 6, 7, 8};
+  ByteStream *stream = byte_stream_from_array (five_to_eight, 4);
+  ByteStream *stream_map_to = stream->map_to (stream, 10);
+  stream_map_to->add_listener (stream_map_to, listener);
+  int length = array->length (array);
+  for (int i = 0; i < length; i++) {
+    Byte value = (Byte) array->get (array, i);
+    if (value == 10) continue;
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
+int main () {
+  initialize_tests ();
+  test_from_varray ();
+  test_from_array ();
+  test_map ();
+  test_map_to ();
   ByteStream *stream_periodic = byte_stream_periodic (40);
   printf ("stream_periodic_created\n");
-  stream_periodic->add_listener(stream_periodic, listener);
-  Byte nine_to_twelve[4] = {9,10,11,12};
-  ByteStream *stream_4 = byte_stream_from_array (nine_to_twelve, 4);
-  ByteStream *stream_map_to = stream_4->map_to(stream_4, 10);
-  stream_map_to->add_listener(stream_map_to, listener);
+  stream_periodic->add_listener (stream_periodic, listener);
   return 0;
 }
