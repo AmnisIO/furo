@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
-project(furo)
+project(rivulet)
 
 set(CMAKE_CXX_STANDARD 11)
 set(furo_version 1.0.0)
