@@ -6,7 +6,8 @@
 
 typedef enum OperatorType {
   OPERATOR_UNKNOWN,
-  OPERATOR_MAP
+  OPERATOR_MAP,
+  OPERATOR_MAP_TO
 } OperatorType;
 
 typedef struct ByteByteOperator {
