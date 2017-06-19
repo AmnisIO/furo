@@ -34,6 +34,8 @@ typedef struct ByteStream {
   struct ByteStream *(*take) (struct ByteStream *self, int count);
   struct ByteStream *(*drop) (struct ByteStream *self, int count);
   struct ByteStream *(*last) (struct ByteStream *self);
+  struct ByteStream *(*sample) (struct ByteStream *self, struct ByteStream *to_sample);
+  struct ByteStream *(*delay) (struct ByteStream *self, int delay);
 } ByteStream;
 
 ByteStream *byte_stream_create (ByteProducer *producer);
