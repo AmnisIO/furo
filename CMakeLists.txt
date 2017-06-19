@@ -11,4 +11,4 @@ file(GLOB test "test/*.c")
 add_library(rivulet ${src})
 
 add_executable(rivulet_test ${test})
-target_link_libraries(rivulet_test LINK_PUBLIC furo)
+target_link_libraries(rivulet_test LINK_PUBLIC rivulet)
