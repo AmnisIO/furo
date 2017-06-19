@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.7)
 project(rivulet)
 
 set(CMAKE_CXX_STANDARD 11)
-set(furo_version 1.0.0)
+set(rivulet_version 1.0.0)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 file(GLOB src "src/*.c")
