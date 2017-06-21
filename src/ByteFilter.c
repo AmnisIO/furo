@@ -34,7 +34,7 @@ static void _complete (ByteListenerInternal *self) {
 ByteFilter *byte_filter_create (ByteStream *in, byte_filter_function filter) {
   ByteFilter *operator = xmalloc (sizeof (ByteFilter));
   byte_byte_operator_initialize ((ByteByteOperator *) operator);
-  operator->operation = OPERATOR_MAP;
+  operator->operation = OPERATOR_FILTER;
   operator->in = in;
   operator->filter = filter;
   operator->_start = _start;
