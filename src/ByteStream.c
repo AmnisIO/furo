@@ -4,6 +4,7 @@
 #include "ByteProducerPeriodic.h"
 #include "ByteMapTo.h"
 #include "ByteFilter.h"
+#include "ByteTake.h"
 
 int STOP_ID_NONE = 0;
 
@@ -73,8 +74,8 @@ static void _add (ByteStream *stream, ByteListenerInternal *listener) {
 }
 
 static void _stop_stream (void *any) {
-  ByteStream *stream = (ByteStream *)any;
-  stream->_stop_now(stream);
+  ByteStream *stream = (ByteStream *) any;
+  stream->_stop_now (stream);
 }
 
 static void _remove (ByteStream *stream, ByteListenerInternal *listener) {
@@ -123,6 +124,7 @@ static ByteSubscription *_subscribe (ByteStream *stream, ByteListener *listener)
 static ByteStream *_map (ByteStream *self, byte_byte_map_function map);
 static ByteStream *_map_to (ByteStream *self, Byte value);
 static ByteStream *_filter (ByteStream *self, byte_steam_filter_function filter);
+static ByteStream *_take (ByteStream *self, int count);
 
 static ByteStream *_create (ByteProducerInternal *producer) {
   ByteStream *stream = xmalloc (sizeof (ByteStream));
@@ -144,6 +146,7 @@ static ByteStream *_create (ByteProducerInternal *producer) {
   stream->map = _map;
   stream->map_to = _map_to;
   stream->filter = _filter;
+  stream->take = _take;
   return stream;
 }
 
@@ -157,6 +160,10 @@ static ByteStream *_map_to (ByteStream *self, Byte value) {
 
 static ByteStream *_filter (ByteStream *self, byte_filter_function filter) {
   return _create ((ByteProducerInternal *) byte_filter_create (self, filter));
+}
+
+static ByteStream *_take (ByteStream *self, int count) {
+  return _create ((ByteProducerInternal *) byte_take_create (self, count));
 }
 
 ByteStream *byte_stream_create (ByteProducer *producer) {
