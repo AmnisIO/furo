@@ -2,6 +2,7 @@
 #include "ByteStreamTimer.h"
 
 ByteStreamTimerTaskIdentifier byte_stream_timer_set_timeout(byte_stream_timer_task task, void *argument, int milliseconds) {
+  if(milliseconds == 0) task(argument);
   return 0;
 }
 

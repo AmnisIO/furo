@@ -97,7 +97,7 @@ void test_map_to () {
   printf ("PASSED\n");
 }
 
-Boolean greater_than_6(Byte value) {
+Boolean greater_than_6 (Byte value) {
   return value > 6;
 }
 
@@ -118,6 +118,27 @@ void test_filter () {
   printf ("PASSED\n");
 }
 
+void test_take () {
+  reset ();
+  printf ("TEST Stream<Byte>.take() ");
+  Byte one_to_four[4] = {1, 2, 3, 4};
+  ByteStream *stream = byte_stream_from_array (one_to_four, 4);
+  ByteStream *stream_take = stream->take (stream, 3);
+  stream_take->add_listener (stream_take, listener);
+  int length = array->length (array);
+  if (length != 3) {
+    printf ("FAILED\n");
+    return;
+  }
+  for (int i = 0; i < length; i++) {
+    Byte value = (Byte) array->get (array, i);
+    if (value != i + 1) continue;
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
 int main () {
   initialize_tests ();
   test_from_varray ();
@@ -125,6 +146,7 @@ int main () {
   test_map ();
   test_map_to ();
   test_filter ();
+  test_take ();
   ByteStream *stream_periodic = byte_stream_periodic (40);
   printf ("stream_periodic_created\n");
   stream_periodic->add_listener (stream_periodic, listener);
