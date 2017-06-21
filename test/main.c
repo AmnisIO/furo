@@ -132,7 +132,7 @@ void test_take () {
   }
   for (int i = 0; i < length; i++) {
     Byte value = (Byte) array->get (array, i);
-    if (value != i + 1) continue;
+    if (value == i + 1) continue;
     printf ("FAILED\n");
     return;
   }
