@@ -44,14 +44,17 @@ static void _insert (VariableLengthArray *array, int index, void *data) {
 static int _remove (VariableLengthArray *array, int index) {
   int length = array->length (array);
   if (length <= index) return length;
-  for (int i = index; i < length; i++) {
-    array->insert (array, i, array->get (array, i + 1));
+  int last_index = length - 1;
+  if (last_index != index) {
+    for (int i = index; i < length; i++) {
+      array->insert (array, i, array->get (array, i + 1));
+    }
   }
-  int one_less = length - 1;
-  array->memory[one_less] = NULL;
-  array->used = array->used - 1;
-  array->index = one_less;
-  return one_less;
+  Size size = sizeof (void *);
+  array->memory[last_index] = NULL;
+  array->used -= size;
+  array->index--;
+  return last_index;
 }
 
 static int _index_of (VariableLengthArray *array, void *data) {
