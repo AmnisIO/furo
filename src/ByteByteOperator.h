@@ -9,7 +9,8 @@ typedef enum OperatorType {
   OPERATOR_MAP,
   OPERATOR_MAP_TO,
   OPERATOR_FILTER,
-  OPERATOR_TAKE
+  OPERATOR_TAKE,
+  OPERATOR_DROP
 } OperatorType;
 
 typedef struct ByteByteOperator {
