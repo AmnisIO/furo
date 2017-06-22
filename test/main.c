@@ -1,13 +1,15 @@
+#include <RivuletErrors.h>
 #include "ByteStream.h"
 
 VariableLengthArray *array = NULL;
 ByteListener *listener = NULL;
+int error_code = -1;
 
 void _next (ByteListener *self, Byte value) {
   array->push (array, (void *) (Size) value);
 }
 void _error (ByteListener *self, int error) {
-
+  error_code = error;
 }
 void _complete (ByteListener *self) {
 
@@ -20,6 +22,7 @@ void initialize_tests () {
 
 void reset () {
   array->clear (array);
+  error_code = -1;
 }
 
 Byte add_one (Byte value) {
@@ -161,6 +164,44 @@ void test_drop () {
   printf ("PASSED\n");
 }
 
+void test_last () {
+  reset ();
+  printf ("TEST Stream<Byte>.last() ");
+  printf ("NO_ERRORS ");
+  Byte one_to_four[4] = {1, 2, 3, 4};
+  ByteStream *stream = byte_stream_from_array (one_to_four, 4);
+  ByteStream *stream_last = stream->last (stream);
+  stream_last->add_listener (stream_last, listener);
+  int length = array->length (array);
+  if (length != 1) {
+    printf ("FAILED\n");
+    return;
+  }
+  Byte value = (Byte) array->get (array, 0);
+  if (value != 4) {
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED ");
+  reset();
+  printf ("WITH_ERRORS ");
+  free(stream);
+  stream = byte_stream_empty ();
+  free(stream_last);
+  stream_last = stream->last (stream);
+  stream_last->add_listener (stream_last, listener);
+  length = array->length (array);
+  if (length != 0) {
+    printf ("FAILED\n");
+    return;
+  }
+  if (error_code != RIVULET_ERROR_LAST_NO_VALUE_IN_LAST_INPUT) {
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
 int main () {
   initialize_tests ();
   test_from_varray ();
@@ -170,6 +211,7 @@ int main () {
   test_filter ();
   test_take ();
   test_drop ();
+  test_last ();
   ByteStream *stream_periodic = byte_stream_periodic (40);
   printf ("stream_periodic_created\n");
   stream_periodic->add_listener (stream_periodic, listener);
