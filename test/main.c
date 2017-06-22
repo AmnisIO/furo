@@ -46,7 +46,7 @@ Byte add_one (Byte value) {
 
 void test_from_varray () {
   reset ();
-  printf ("TEST Stream<Byte>.fromVariableLengthArray() ");
+  printf ("TEST Stream<Byte>.fromVariableLengthArray()\n");
   VariableLengthArray *one_to_four = variable_length_array_create ();
   int a = 1, b = 2, c = 3, d = 4;
   one_to_four->push (one_to_four, &a);
@@ -67,7 +67,7 @@ void test_from_varray () {
 
 void test_from_array () {
   reset ();
-  printf ("TEST Stream<Byte>.fromArray() ");
+  printf ("TEST Stream<Byte>.fromArray()\n");
   Byte five_to_eight[4] = {5, 6, 7, 8};
   ByteStream *stream = byte_stream_from_array (five_to_eight, 4);
   stream->add_listener (stream, listener);
@@ -83,7 +83,7 @@ void test_from_array () {
 
 void test_map () {
   reset ();
-  printf ("TEST Stream<Byte>.map() ");
+  printf ("TEST Stream<Byte>.map()\n");
   Byte five_to_eight[4] = {5, 6, 7, 8};
   ByteStream *stream = byte_stream_from_array (five_to_eight, 4);
   ByteStream *stream_map = stream->map (stream, add_one);
@@ -100,7 +100,7 @@ void test_map () {
 
 void test_map_to () {
   reset ();
-  printf ("TEST Stream<Byte>.mapTo() ");
+  printf ("TEST Stream<Byte>.mapTo()\n");
   Byte five_to_eight[4] = {5, 6, 7, 8};
   ByteStream *stream = byte_stream_from_array (five_to_eight, 4);
   ByteStream *stream_map_to = stream->map_to (stream, 10);
@@ -121,7 +121,7 @@ Boolean greater_than_6 (Byte value) {
 
 void test_filter () {
   reset ();
-  printf ("TEST Stream<Byte>.filter() ");
+  printf ("TEST Stream<Byte>.filter()\n");
   Byte five_to_eight[4] = {5, 6, 7, 8};
   ByteStream *stream = byte_stream_from_array (five_to_eight, 4);
   ByteStream *stream_filter = stream->filter (stream, greater_than_6);
@@ -138,7 +138,7 @@ void test_filter () {
 
 void test_take () {
   reset ();
-  printf ("TEST Stream<Byte>.take() ");
+  printf ("TEST Stream<Byte>.take()\n");
   Byte one_to_four[4] = {1, 2, 3, 4};
   ByteStream *stream = byte_stream_from_array (one_to_four, 4);
   ByteStream *stream_take = stream->take (stream, 3);
@@ -159,7 +159,7 @@ void test_take () {
 
 void test_drop () {
   reset ();
-  printf ("TEST Stream<Byte>.drop() ");
+  printf ("TEST Stream<Byte>.drop()\n");
   Byte one_to_four[4] = {1, 2, 3, 4};
   int to_drop = 3;
   ByteStream *stream = byte_stream_from_array (one_to_four, 4);
@@ -181,8 +181,7 @@ void test_drop () {
 
 void test_last () {
   reset ();
-  printf ("TEST Stream<Byte>.last() ");
-  printf ("NO_ERRORS ");
+  printf ("TEST Stream<Byte>.last()\n");
   Byte one_to_four[4] = {1, 2, 3, 4};
   ByteStream *stream = byte_stream_from_array (one_to_four, 4);
   ByteStream *stream_last = stream->last (stream);
@@ -197,9 +196,7 @@ void test_last () {
     printf ("FAILED\n");
     return;
   }
-  printf ("PASSED ");
   reset ();
-  printf ("WITH_ERRORS ");
   free (stream);
   stream = byte_stream_empty ();
   free (stream_last);
@@ -219,7 +216,7 @@ void test_last () {
 
 void test_periodic () {
   reset ();
-  printf ("TEST Stream<Byte>.periodic() ");
+  printf ("TEST Stream<Byte>.periodic()\n");
   ByteStream *stream_periodic = byte_stream_periodic (2);
   stream_periodic->add_listener (stream_periodic, listener);
   int length = array->length (array);
@@ -251,7 +248,7 @@ void test_periodic () {
 
 void test_delay () {
   reset ();
-  printf ("TEST Stream<Byte>.delay() ");
+  printf ("TEST Stream<Byte>.delay()\n");
   ByteStream *stream_periodic = byte_stream_periodic (1);
   ByteStream *stream_delay = stream_periodic->delay(stream_periodic, 1);
   stream_delay->add_listener (stream_delay, listener);
