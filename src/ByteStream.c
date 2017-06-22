@@ -5,6 +5,7 @@
 #include "ByteMapTo.h"
 #include "ByteFilter.h"
 #include "ByteTake.h"
+#include "ByteDrop.h"
 
 int STOP_ID_NONE = 0;
 
@@ -125,6 +126,7 @@ static ByteStream *_map (ByteStream *self, byte_byte_map_function map);
 static ByteStream *_map_to (ByteStream *self, Byte value);
 static ByteStream *_filter (ByteStream *self, byte_steam_filter_function filter);
 static ByteStream *_take (ByteStream *self, int count);
+static ByteStream *_drop (ByteStream *self, int count);
 
 static ByteStream *_create (ByteProducerInternal *producer) {
   ByteStream *stream = xmalloc (sizeof (ByteStream));
@@ -147,6 +149,7 @@ static ByteStream *_create (ByteProducerInternal *producer) {
   stream->map_to = _map_to;
   stream->filter = _filter;
   stream->take = _take;
+  stream->drop = _drop;
   return stream;
 }
 
@@ -164,6 +167,9 @@ static ByteStream *_filter (ByteStream *self, byte_filter_function filter) {
 
 static ByteStream *_take (ByteStream *self, int count) {
   return _create ((ByteProducerInternal *) byte_take_create (self, count));
+}
+static ByteStream *_drop (ByteStream *self, int count) {
+  return _create ((ByteProducerInternal *) byte_drop_create (self, count));
 }
 
 ByteStream *byte_stream_create (ByteProducer *producer) {
