@@ -4,7 +4,7 @@ VariableLengthArray *array = NULL;
 ByteListener *listener = NULL;
 
 void _next (ByteListener *self, Byte value) {
-  array->push (array, (void *) value);
+  array->push (array, (void *) (uintptr_t) value);
 }
 void _error (ByteListener *self, int error) {
 
@@ -139,6 +139,28 @@ void test_take () {
   printf ("PASSED\n");
 }
 
+void test_drop () {
+  reset ();
+  printf ("TEST Stream<Byte>.drop() ");
+  Byte one_to_four[4] = {1, 2, 3, 4};
+  int to_drop = 3;
+  ByteStream *stream = byte_stream_from_array (one_to_four, 4);
+  ByteStream *stream_drop = stream->drop (stream, to_drop);
+  stream_drop->add_listener (stream_drop, listener);
+  int length = array->length (array);
+  if (length != 1) {
+    printf ("FAILED\n");
+    return;
+  }
+  for (int i = 0; i < length; i++) {
+    Byte value = (Byte) array->get (array, i);
+    if (value == i + 1 + to_drop) continue;
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
 int main () {
   initialize_tests ();
   test_from_varray ();
@@ -147,6 +169,7 @@ int main () {
   test_map_to ();
   test_filter ();
   test_take ();
+  test_drop ();
   ByteStream *stream_periodic = byte_stream_periodic (40);
   printf ("stream_periodic_created\n");
   stream_periodic->add_listener (stream_periodic, listener);
