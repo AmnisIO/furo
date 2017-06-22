@@ -249,6 +249,38 @@ void test_periodic () {
   printf ("PASSED\n");
 }
 
+void test_delay () {
+  reset ();
+  printf ("TEST Stream<Byte>.delay() ");
+  ByteStream *stream_periodic = byte_stream_periodic (1);
+  ByteStream *stream_delay = stream_periodic->delay(stream_periodic, 1);
+  stream_delay->add_listener (stream_delay, listener);
+  int length = array->length (array);
+  if (length != 0) {
+    printf ("FAILED\n");
+    return;
+  }
+  rivulet_timer->tick ();
+  length = array->length (array);
+  if (length != 0) {
+    printf ("FAILED\n");
+    return;
+  }
+  rivulet_timer->tick ();
+  length = array->length (array);
+  if (length == 0) {
+    printf ("FAILED\n");
+    return;
+  }
+  rivulet_timer->tick ();
+  length = array->length (array);
+  if (length != 2) {
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
 
 int main () {
   initialize_tests ();
@@ -261,5 +293,6 @@ int main () {
   test_drop ();
   test_last ();
   test_periodic ();
+  test_delay ();
   return 0;
 }
