@@ -1,9 +1,21 @@
+#include <RivuletTask.h>
+#include <RivuletTimer.h>
 #include <RivuletErrors.h>
 #include "ByteStream.h"
 
 VariableLengthArray *array = NULL;
 ByteListener *listener = NULL;
 int error_code = -1;
+
+static Milliseconds _milliseconds = 0;
+
+Milliseconds get_milliseconds () {
+  return _milliseconds++;
+}
+
+extern void reset_milliseconds () {
+  _milliseconds = 0;
+}
 
 void _next (ByteListener *self, Byte value) {
   array->push (array, (void *) (Size) value);
@@ -18,11 +30,14 @@ void _complete (ByteListener *self) {
 void initialize_tests () {
   array = variable_length_array_create ();
   listener = byte_listener_create (_next, _error, _complete);
+  rivulet_timer_initialize (get_milliseconds);
 }
 
 void reset () {
   array->clear (array);
   error_code = -1;
+  reset_milliseconds ();
+  rivulet_timer->_tasks->clear (rivulet_timer->_tasks);
 }
 
 Byte add_one (Byte value) {
@@ -183,11 +198,11 @@ void test_last () {
     return;
   }
   printf ("PASSED ");
-  reset();
+  reset ();
   printf ("WITH_ERRORS ");
-  free(stream);
+  free (stream);
   stream = byte_stream_empty ();
-  free(stream_last);
+  free (stream_last);
   stream_last = stream->last (stream);
   stream_last->add_listener (stream_last, listener);
   length = array->length (array);
@@ -202,6 +217,39 @@ void test_last () {
   printf ("PASSED\n");
 }
 
+void test_periodic () {
+  reset ();
+  printf ("TEST Stream<Byte>.periodic() ");
+  ByteStream *stream_periodic = byte_stream_periodic (2);
+  stream_periodic->add_listener (stream_periodic, listener);
+  int length = array->length (array);
+  if (length != 0) {
+    printf ("FAILED\n");
+    return;
+  }
+  rivulet_timer->tick ();
+  length = array->length (array);
+  if (length != 0) {
+    printf ("FAILED\n");
+    return;
+  }
+  rivulet_timer->tick ();
+  length = array->length (array);
+  if (length == 0) {
+    printf ("FAILED\n");
+    return;
+  }
+  rivulet_timer->tick ();
+  rivulet_timer->tick ();
+  length = array->length (array);
+  if (length != 2) {
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
+
 int main () {
   initialize_tests ();
   test_from_varray ();
@@ -212,8 +260,6 @@ int main () {
   test_take ();
   test_drop ();
   test_last ();
-  ByteStream *stream_periodic = byte_stream_periodic (40);
-  printf ("stream_periodic_created\n");
-  stream_periodic->add_listener (stream_periodic, listener);
+  test_periodic ();
   return 0;
 }

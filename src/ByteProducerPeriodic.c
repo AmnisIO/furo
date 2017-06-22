@@ -11,12 +11,12 @@ static void _tick (void *self) {
 static void _periodic_start (ByteProducer *self, ByteListenerInternal *listener) {
   ByteProducerPeriodic *producer = (ByteProducerPeriodic *) self;
   producer->_listener = listener;
-  producer->_task_id = byte_stream_timer_set_interval (_tick, producer, producer->_period);
+  producer->_task_id = rivulet_timer->set_interval (_tick, producer, producer->_period);
 }
 
 static void _periodic_stop (ByteProducer *self) {
   ByteProducerPeriodic *producer = (ByteProducerPeriodic *) self;
-  byte_stream_timer_clear_timeout (producer->_task_id);
+  rivulet_timer->clear_task (producer->_task_id);
 }
 
 ByteProducer *byte_producer_periodic_create(int period) {

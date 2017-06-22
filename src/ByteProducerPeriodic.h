@@ -2,7 +2,7 @@
 #define GYRUS_ARDUINO_UNO_BYTEPRODUCERPERIODIC_H
 
 #include "ByteProducer.h"
-#include "ByteStreamTimer.h"
+#include "RivuletTimer.h"
 
 typedef struct ByteProducerPeriodic {
   ByteObservableType type;
@@ -12,7 +12,7 @@ typedef struct ByteProducerPeriodic {
   byte_producer_stop stop;
   int _period;
   ByteListenerInternal *_listener;
-  ByteStreamTimerTaskIdentifier _task_id;
+  RivuletTaskIdentifier _task_id;
 } ByteProducerPeriodic;
 
 ByteProducer *byte_producer_periodic_create(int period);

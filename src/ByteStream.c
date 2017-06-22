@@ -1,6 +1,5 @@
 #include "ByteStream.h"
 #include "ByteByteMap.h"
-#include "ByteStreamTimer.h"
 #include "ByteProducerPeriodic.h"
 #include "ByteMapTo.h"
 #include "ByteFilter.h"
@@ -67,7 +66,7 @@ static void _add (ByteStream *stream, ByteListenerInternal *listener) {
   int length = internal_listeners->push (internal_listeners, listener);
   if (length > 1) return;
   if (stream->_stop_id != STOP_ID_NONE) {
-    byte_stream_timer_clear_timeout (stream->_stop_id);
+    rivulet_timer->clear_task (stream->_stop_id);
     stream->_stop_id = STOP_ID_NONE;
   } else {
     ByteProducerInternal *producer = stream->_producer;
@@ -87,7 +86,7 @@ static void _remove (ByteStream *stream, ByteListenerInternal *listener) {
     int length = internal_listeners->remove (internal_listeners, index);
     if (stream->_producer != NULL && length == 0) {
       stream->_error_code = ERROR_NONE;
-      stream->_stop_id = byte_stream_timer_set_timeout (_stop_stream, stream, 0);
+      stream->_stop_id = rivulet_timer->set_timeout (_stop_stream, stream, 0);
     }
   }
 }
