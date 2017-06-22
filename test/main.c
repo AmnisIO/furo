@@ -4,7 +4,7 @@ VariableLengthArray *array = NULL;
 ByteListener *listener = NULL;
 
 void _next (ByteListener *self, Byte value) {
-  array->push (array, (void *) (uintptr_t) value);
+  array->push (array, (void *) (Size) value);
 }
 void _error (ByteListener *self, int error) {
 
