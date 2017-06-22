@@ -11,7 +11,8 @@ typedef enum OperatorType {
   OPERATOR_FILTER,
   OPERATOR_TAKE,
   OPERATOR_DROP,
-  OPERATOR_LAST
+  OPERATOR_LAST,
+  OPERATOR_DELAY
 } OperatorType;
 
 typedef struct ByteByteOperator {
