@@ -19,5 +19,7 @@ typedef void (*byte_listener_complete) (struct ByteListener *self);
 
 ByteListener *
 byte_listener_create (byte_listener_next next, byte_listener_error error, byte_listener_complete complete);
+void byte_listener_initialize (ByteListener *listener, byte_listener_next next, byte_listener_error error,
+                               byte_listener_complete complete);
 
 #endif //RIVULET_BYTELISTENER_H

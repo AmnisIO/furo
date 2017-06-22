@@ -16,6 +16,12 @@ static void _complete (struct ByteListenerInternal *self) {
 ByteListener *
 byte_listener_create (byte_listener_next next, byte_listener_error error, byte_listener_complete complete) {
   ByteListener *listener = xmalloc (sizeof (ByteListener));
+  byte_listener_initialize (listener, next, error, complete);
+  return listener;
+}
+
+void byte_listener_initialize (ByteListener *listener, byte_listener_next next, byte_listener_error error,
+                               byte_listener_complete complete) {
   listener->type = OBSERVABLE_TYPE_LISTENER;
   listener->_next = _next;
   listener->_error = _error;
@@ -23,5 +29,4 @@ byte_listener_create (byte_listener_next next, byte_listener_error error, byte_l
   listener->next = next;
   listener->error = error;
   listener->complete = complete;
-  return listener;
 }
