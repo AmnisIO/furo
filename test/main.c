@@ -250,7 +250,7 @@ void test_delay () {
   reset ();
   printf ("TEST Stream<Byte>.delay()\n");
   ByteStream *stream_periodic = byte_stream_periodic (1);
-  ByteStream *stream_delay = stream_periodic->delay(stream_periodic, 1);
+  ByteStream *stream_delay = stream_periodic->delay (stream_periodic, 1);
   stream_delay->add_listener (stream_delay, listener);
   int length = array->length (array);
   if (length != 0) {
@@ -278,6 +278,56 @@ void test_delay () {
   printf ("PASSED\n");
 }
 
+static int sample_map_helper = 0;
+
+Byte sample_map (Byte value) {
+  return (Byte) (++sample_map_helper % 255);
+}
+
+void test_sample () {
+  reset ();
+  printf ("TEST Stream<Byte>.sample()\n");
+  ByteStream *stream_periodic_every_tick = byte_stream_periodic (1);
+  ByteStream *stream_periodic_map = stream_periodic_every_tick->map (stream_periodic_every_tick, sample_map);
+  ByteStream *stream_periodic_every_fifty_ticks = byte_stream_periodic (50);
+  ByteStream *stream_periodic_map_sampled = stream_periodic_every_fifty_ticks->sample (
+          stream_periodic_every_fifty_ticks, stream_periodic_map);
+  stream_periodic_map_sampled->add_listener (stream_periodic_map_sampled, listener);
+  for (int i = 0; i < 49; i++) {
+    rivulet_timer->tick ();
+  }
+  int length = array->length (array);
+  if (length != 0) {
+    printf ("FAILED\n");
+    return;
+  }
+  rivulet_timer->tick ();
+  length = array->length (array);
+  if (length != 1) {
+    printf ("FAILED\n");
+    return;
+  }
+  Byte value = (Byte) array->get (array, 0);
+  if (value != 50) {
+    printf ("FAILED\n");
+    return;
+  }
+  for (int i = 0; i < 50; i++) {
+    rivulet_timer->tick ();
+  }
+  length = array->length (array);
+  if (length != 2) {
+    printf ("FAILED\n");
+    return;
+  }
+  value = (Byte) array->get (array, 1);
+  if (value != 100) {
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
 
 int main () {
   initialize_tests ();
@@ -291,5 +341,6 @@ int main () {
   test_last ();
   test_periodic ();
   test_delay ();
+  test_sample ();
   return 0;
 }
