@@ -43,7 +43,7 @@ static void _complete (ByteListenerInternal *self) {
 ByteLast *byte_last_create (ByteStream *in) {
   ByteLast *operator = xmalloc (sizeof (ByteLast));
   byte_byte_operator_initialize ((ByteByteOperator *) operator);
-  operator->operation = OPERATOR_DROP;
+  operator->operation = OPERATOR_LAST;
   operator->in = in;
   operator->_start = _start;
   operator->_stop = _stop;
