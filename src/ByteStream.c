@@ -7,6 +7,7 @@
 #include "ByteDrop.h"
 #include "ByteLast.h"
 #include "ByteDelay.h"
+#include "ByteSample.h"
 
 int STOP_ID_NONE = 0;
 
@@ -130,6 +131,7 @@ static ByteStream *_take (ByteStream *self, int count);
 static ByteStream *_drop (ByteStream *self, int count);
 static ByteStream *_last (ByteStream *self);
 static ByteStream *_delay (ByteStream *self, int delay);
+static ByteStream *_sample (ByteStream *self, ByteStream *to_sample);
 
 static ByteStream *_create (ByteProducerInternal *producer) {
   ByteStream *stream = xmalloc (sizeof (ByteStream));
@@ -155,6 +157,7 @@ static ByteStream *_create (ByteProducerInternal *producer) {
   stream->drop = _drop;
   stream->last = _last;
   stream->delay = _delay;
+  stream->sample = _sample;
   return stream;
 }
 
@@ -184,6 +187,10 @@ static ByteStream *_last (ByteStream *self) {
 
 static ByteStream *_delay (ByteStream *self, int delay) {
   return _create ((ByteProducerInternal *) byte_delay_create (self, delay));
+}
+
+static ByteStream *_sample (ByteStream *self, ByteStream *to_sample) {
+  return _create ((ByteProducerInternal *) byte_sample_create (self, to_sample));
 }
 
 ByteStream *byte_stream_create (ByteProducer *producer) {
