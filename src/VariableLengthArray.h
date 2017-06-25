@@ -1,7 +1,7 @@
 #ifndef RIVULET_VARIABLELENGTHARRAY_H
 #define RIVULET_VARIABLELENGTHARRAY_H
 
-#include "utils.h"
+#include "RivuletUtils.h"
 #include "Boolean.h"
 
 typedef Boolean (*variable_length_array_is_equal) (void* data, void* to_find);

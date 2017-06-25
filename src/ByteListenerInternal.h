@@ -2,7 +2,7 @@
 #define RIVULET_BYTELISTENERINTERNAL_H
 
 #include "Byte.h"
-#include "utils.h"
+#include "RivuletUtils.h"
 #include "ByteObservable.h"
 
 typedef struct ByteListenerInternal {
