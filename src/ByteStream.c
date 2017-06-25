@@ -110,20 +110,6 @@ typedef struct ByteSubscriptionImplementation {
 static void _unsubscribe (ByteStream *stream, ByteListener *listener) {
   stream->remove_listener (stream, listener);
 }
-
-static void _unsubscribe_with_subscription (ByteSubscription *subscription) {
-  ByteSubscriptionImplementation *implementation = (ByteSubscriptionImplementation *) subscription;
-  _unsubscribe (implementation->stream, implementation->listener);
-}
-
-static ByteSubscription *_subscribe (ByteStream *stream, ByteListener *listener) {
-  stream->add_listener (stream, listener);
-  ByteSubscriptionImplementation *subscription = xmalloc (sizeof (ByteSubscriptionImplementation));
-  subscription->stream = stream;
-  subscription->listener = listener;
-  subscription->unsubscribe = _unsubscribe_with_subscription;
-  return (ByteSubscription *) subscription;
-}
 static ByteStream *_map (ByteStream *self, byte_byte_map_function map);
 static ByteStream *_map_to (ByteStream *self, Byte value);
 static ByteStream *_filter (ByteStream *self, byte_steam_filter_function filter);
@@ -149,7 +135,6 @@ static ByteStream *_create (ByteProducerInternal *producer) {
   stream->_error_code = ERROR_NONE;
   stream->add_listener = _add_listener;
   stream->remove_listener = _remove_listener;
-  stream->subscribe = _subscribe;
   stream->map = _map;
   stream->map_to = _map_to;
   stream->filter = _filter;
