@@ -101,15 +101,6 @@ static void _remove_listener (ByteStream *stream, ByteListener *listener) {
   stream->_remove (stream, (ByteListenerInternal *) listener);
 }
 
-typedef struct ByteSubscriptionImplementation {
-  void (*unsubscribe) (struct ByteSubscription *self);
-  ByteStream *stream;
-  ByteListener *listener;
-} ByteSubscriptionImplementation;
-
-static void _unsubscribe (ByteStream *stream, ByteListener *listener) {
-  stream->remove_listener (stream, listener);
-}
 static ByteStream *_map (ByteStream *self, byte_byte_map_function map);
 static ByteStream *_map_to (ByteStream *self, Byte value);
 static ByteStream *_filter (ByteStream *self, byte_steam_filter_function filter);
