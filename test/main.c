@@ -328,6 +328,32 @@ void test_sample () {
   printf ("PASSED\n");
 }
 
+void test_empty () {
+  reset ();
+  printf ("TEST Stream<Byte>.empty()\n");
+  ByteStream *stream = byte_stream_empty ();
+  stream->add_listener (stream, listener);
+  int length = array->length (array);
+  if (length != 0) {
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
+void test_never () {
+  reset ();
+  printf ("TEST Stream<Byte>.never()\n");
+  ByteStream *stream = byte_stream_never ();
+  stream->add_listener (stream, listener);
+  int length = array->length (array);
+  if (length != 0) {
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
 
 int main () {
   initialize_tests ();
@@ -342,5 +368,7 @@ int main () {
   test_periodic ();
   test_delay ();
   test_sample ();
+  test_empty ();
+  test_never ();
   return 0;
 }
