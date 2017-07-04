@@ -11,6 +11,6 @@ RivuletTask *rivulet_task_create (rivulet_task callback, void *argument, Rivulet
   task->type = type;
   task->_id = task_id_counter++;
   task->period = period;
-  task->last_called_at = rivulet_timer->get_milliseconds();
+  task->last_called_at = rivulet_timer->get_milliseconds ();
   return task;
 }

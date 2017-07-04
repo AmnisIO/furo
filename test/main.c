@@ -1,10 +1,10 @@
 #include <RivuletTask.h>
 #include <RivuletTimer.h>
 #include <RivuletErrors.h>
-#include "ByteStream.h"
+#include "RivuletStream.h"
 
 VariableLengthArray *array = NULL;
-ByteListener *listener = NULL;
+RivuletListener *listener = NULL;
 int error_code = -1;
 
 static Milliseconds _milliseconds = 0;
@@ -17,19 +17,19 @@ extern void reset_milliseconds () {
   _milliseconds = 0;
 }
 
-void _next (ByteListener *self, Byte value) {
+void _next (RivuletListener *self, int value) {
   array->push (array, (void *) (Size) value);
 }
-void _error (ByteListener *self, int error) {
+void _error (RivuletListener *self, int error) {
   error_code = error;
 }
-void _complete (ByteListener *self) {
+void _complete (RivuletListener *self) {
 
 }
 
 void initialize_tests () {
   array = variable_length_array_create ();
-  listener = byte_listener_create (_next, _error, _complete);
+  listener = rivulet_listener_create (_next, _error, _complete);
   rivulet_timer_initialize (get_milliseconds);
 }
 
@@ -40,24 +40,24 @@ void reset () {
   rivulet_timer->_tasks->clear (rivulet_timer->_tasks);
 }
 
-Byte add_one (Byte value) {
-  return value + (Byte) 1;
+int add_one (int value) {
+  return value + 1;
 }
 
 void test_from_varray () {
   reset ();
-  printf ("TEST Stream<Byte>.fromVariableLengthArray()\n");
+  printf ("TEST RivuletStream.fromVariableLengthArray()\n");
   VariableLengthArray *one_to_four = variable_length_array_create ();
   int a = 1, b = 2, c = 3, d = 4;
   one_to_four->push (one_to_four, &a);
   one_to_four->push (one_to_four, &b);
   one_to_four->push (one_to_four, &c);
   one_to_four->push (one_to_four, &d);
-  ByteStream *stream = byte_stream_from_variable_length_array (one_to_four);
+  RivuletStream *stream = rivulet_stream_from_variable_length_array (one_to_four);
   stream->add_listener (stream, listener);
   int length = array->length (array);
   for (int i = 0; i < length; i++) {
-    Byte value = (Byte) array->get (array, i);
+    int value = (int) array->get (array, i);
     if (value == i + 1) continue;
     printf ("FAILED\n");
     return;
@@ -67,13 +67,13 @@ void test_from_varray () {
 
 void test_from_array () {
   reset ();
-  printf ("TEST Stream<Byte>.fromArray()\n");
-  Byte five_to_eight[4] = {5, 6, 7, 8};
-  ByteStream *stream = byte_stream_from_array (five_to_eight, 4);
+  printf ("TEST RivuletStream.fromArray()\n");
+  int five_to_eight[4] = {5, 6, 7, 8};
+  RivuletStream *stream = rivulet_stream_from_array (five_to_eight, 4);
   stream->add_listener (stream, listener);
   int length = array->length (array);
   for (int i = 0; i < length; i++) {
-    Byte value = (Byte) array->get (array, i);
+    int value = (int) array->get (array, i);
     if (value == i + 5) continue;
     printf ("FAILED\n");
     return;
@@ -83,14 +83,14 @@ void test_from_array () {
 
 void test_map () {
   reset ();
-  printf ("TEST Stream<Byte>.map()\n");
-  Byte five_to_eight[4] = {5, 6, 7, 8};
-  ByteStream *stream = byte_stream_from_array (five_to_eight, 4);
-  ByteStream *stream_map = stream->map (stream, add_one);
+  printf ("TEST RivuletStream.map()\n");
+  int five_to_eight[4] = {5, 6, 7, 8};
+  RivuletStream *stream = rivulet_stream_from_array (five_to_eight, 4);
+  RivuletStream *stream_map = stream->map (stream, add_one);
   stream_map->add_listener (stream_map, listener);
   int length = array->length (array);
   for (int i = 0; i < length; i++) {
-    Byte value = (Byte) array->get (array, i);
+    int value = (int) array->get (array, i);
     if (value == i + 6) continue;
     printf ("FAILED\n");
     return;
@@ -100,14 +100,14 @@ void test_map () {
 
 void test_map_to () {
   reset ();
-  printf ("TEST Stream<Byte>.mapTo()\n");
-  Byte five_to_eight[4] = {5, 6, 7, 8};
-  ByteStream *stream = byte_stream_from_array (five_to_eight, 4);
-  ByteStream *stream_map_to = stream->map_to (stream, 10);
+  printf ("TEST RivuletStream.mapTo()\n");
+  int five_to_eight[4] = {5, 6, 7, 8};
+  RivuletStream *stream = rivulet_stream_from_array (five_to_eight, 4);
+  RivuletStream *stream_map_to = stream->map_to (stream, 10);
   stream_map_to->add_listener (stream_map_to, listener);
   int length = array->length (array);
   for (int i = 0; i < length; i++) {
-    Byte value = (Byte) array->get (array, i);
+    int value = (int) array->get (array, i);
     if (value == 10) continue;
     printf ("FAILED\n");
     return;
@@ -115,20 +115,20 @@ void test_map_to () {
   printf ("PASSED\n");
 }
 
-Boolean greater_than_6 (Byte value) {
+Boolean greater_than_6 (int value) {
   return value > 6;
 }
 
 void test_filter () {
   reset ();
-  printf ("TEST Stream<Byte>.filter()\n");
-  Byte five_to_eight[4] = {5, 6, 7, 8};
-  ByteStream *stream = byte_stream_from_array (five_to_eight, 4);
-  ByteStream *stream_filter = stream->filter (stream, greater_than_6);
+  printf ("TEST RivuletStream.filter()\n");
+  int five_to_eight[4] = {5, 6, 7, 8};
+  RivuletStream *stream = rivulet_stream_from_array (five_to_eight, 4);
+  RivuletStream *stream_filter = stream->filter (stream, greater_than_6);
   stream_filter->add_listener (stream_filter, listener);
   int length = array->length (array);
   for (int i = 0; i < length; i++) {
-    Byte value = (Byte) array->get (array, i);
+    int value = (int) array->get (array, i);
     if (value > 6) continue;
     printf ("FAILED\n");
     return;
@@ -138,10 +138,10 @@ void test_filter () {
 
 void test_take () {
   reset ();
-  printf ("TEST Stream<Byte>.take()\n");
-  Byte one_to_four[4] = {1, 2, 3, 4};
-  ByteStream *stream = byte_stream_from_array (one_to_four, 4);
-  ByteStream *stream_take = stream->take (stream, 3);
+  printf ("TEST RivuletStream.take()\n");
+  int one_to_four[4] = {1, 2, 3, 4};
+  RivuletStream *stream = rivulet_stream_from_array (one_to_four, 4);
+  RivuletStream *stream_take = stream->take (stream, 3);
   stream_take->add_listener (stream_take, listener);
   int length = array->length (array);
   if (length != 3) {
@@ -149,7 +149,7 @@ void test_take () {
     return;
   }
   for (int i = 0; i < length; i++) {
-    Byte value = (Byte) array->get (array, i);
+    int value = (int) array->get (array, i);
     if (value == i + 1) continue;
     printf ("FAILED\n");
     return;
@@ -159,11 +159,11 @@ void test_take () {
 
 void test_drop () {
   reset ();
-  printf ("TEST Stream<Byte>.drop()\n");
-  Byte one_to_four[4] = {1, 2, 3, 4};
+  printf ("TEST RivuletStream.drop()\n");
+  int one_to_four[4] = {1, 2, 3, 4};
   int to_drop = 3;
-  ByteStream *stream = byte_stream_from_array (one_to_four, 4);
-  ByteStream *stream_drop = stream->drop (stream, to_drop);
+  RivuletStream *stream = rivulet_stream_from_array (one_to_four, 4);
+  RivuletStream *stream_drop = stream->drop (stream, to_drop);
   stream_drop->add_listener (stream_drop, listener);
   int length = array->length (array);
   if (length != 1) {
@@ -171,7 +171,7 @@ void test_drop () {
     return;
   }
   for (int i = 0; i < length; i++) {
-    Byte value = (Byte) array->get (array, i);
+    int value = (int) array->get (array, i);
     if (value == i + 1 + to_drop) continue;
     printf ("FAILED\n");
     return;
@@ -181,24 +181,24 @@ void test_drop () {
 
 void test_last () {
   reset ();
-  printf ("TEST Stream<Byte>.last()\n");
-  Byte one_to_four[4] = {1, 2, 3, 4};
-  ByteStream *stream = byte_stream_from_array (one_to_four, 4);
-  ByteStream *stream_last = stream->last (stream);
+  printf ("TEST RivuletStream.last()\n");
+  int one_to_four[4] = {1, 2, 3, 4};
+  RivuletStream *stream = rivulet_stream_from_array (one_to_four, 4);
+  RivuletStream *stream_last = stream->last (stream);
   stream_last->add_listener (stream_last, listener);
   int length = array->length (array);
   if (length != 1) {
     printf ("FAILED\n");
     return;
   }
-  Byte value = (Byte) array->get (array, 0);
+  int value = (int) array->get (array, 0);
   if (value != 4) {
     printf ("FAILED\n");
     return;
   }
   reset ();
   free (stream);
-  stream = byte_stream_empty ();
+  stream = rivulet_stream_empty ();
   free (stream_last);
   stream_last = stream->last (stream);
   stream_last->add_listener (stream_last, listener);
@@ -216,8 +216,8 @@ void test_last () {
 
 void test_periodic () {
   reset ();
-  printf ("TEST Stream<Byte>.periodic()\n");
-  ByteStream *stream_periodic = byte_stream_periodic (2);
+  printf ("TEST RivuletStream.periodic()\n");
+  RivuletStream *stream_periodic = rivulet_stream_periodic (2);
   stream_periodic->add_listener (stream_periodic, listener);
   int length = array->length (array);
   if (length != 0) {
@@ -248,9 +248,9 @@ void test_periodic () {
 
 void test_delay () {
   reset ();
-  printf ("TEST Stream<Byte>.delay()\n");
-  ByteStream *stream_periodic = byte_stream_periodic (1);
-  ByteStream *stream_delay = stream_periodic->delay (stream_periodic, 1);
+  printf ("TEST RivuletStream.delay()\n");
+  RivuletStream *stream_periodic = rivulet_stream_periodic (1);
+  RivuletStream *stream_delay = stream_periodic->delay (stream_periodic, 1);
   stream_delay->add_listener (stream_delay, listener);
   int length = array->length (array);
   if (length != 0) {
@@ -280,17 +280,18 @@ void test_delay () {
 
 static int sample_map_helper = 0;
 
-Byte sample_map (Byte value) {
-  return (Byte) (++sample_map_helper % 255);
+int sample_map (int value) {
+  return (int) (++sample_map_helper % 1024);
 }
 
 void test_sample () {
   reset ();
-  printf ("TEST Stream<Byte>.sample()\n");
-  ByteStream *stream_periodic_every_tick = byte_stream_periodic (1);
-  ByteStream *stream_periodic_map = stream_periodic_every_tick->map (stream_periodic_every_tick, sample_map);
-  ByteStream *stream_periodic_every_fifty_ticks = byte_stream_periodic (50);
-  ByteStream *stream_periodic_map_sampled = stream_periodic_every_fifty_ticks->sample (
+  printf ("TEST RivuletStream.sample()\n");
+  RivuletStream *stream_periodic_every_tick = rivulet_stream_periodic (1);
+  RivuletStream *stream_periodic_map = stream_periodic_every_tick->map (stream_periodic_every_tick,
+                                                                        sample_map);
+  RivuletStream *stream_periodic_every_fifty_ticks = rivulet_stream_periodic (50);
+  RivuletStream *stream_periodic_map_sampled = stream_periodic_every_fifty_ticks->sample (
           stream_periodic_every_fifty_ticks, stream_periodic_map);
   stream_periodic_map_sampled->add_listener (stream_periodic_map_sampled, listener);
   for (int i = 0; i < 49; i++) {
@@ -307,7 +308,7 @@ void test_sample () {
     printf ("FAILED\n");
     return;
   }
-  Byte value = (Byte) array->get (array, 0);
+  int value = (int) array->get (array, 0);
   if (value != 50) {
     printf ("FAILED\n");
     return;
@@ -320,7 +321,7 @@ void test_sample () {
     printf ("FAILED\n");
     return;
   }
-  value = (Byte) array->get (array, 1);
+  value = (int) array->get (array, 1);
   if (value != 100) {
     printf ("FAILED\n");
     return;
@@ -330,8 +331,8 @@ void test_sample () {
 
 void test_empty () {
   reset ();
-  printf ("TEST Stream<Byte>.empty()\n");
-  ByteStream *stream = byte_stream_empty ();
+  printf ("TEST RivuletStream.empty()\n");
+  RivuletStream *stream = rivulet_stream_empty ();
   stream->add_listener (stream, listener);
   int length = array->length (array);
   if (length != 0) {
@@ -343,8 +344,8 @@ void test_empty () {
 
 void test_never () {
   reset ();
-  printf ("TEST Stream<Byte>.never()\n");
-  ByteStream *stream = byte_stream_never ();
+  printf ("TEST RivuletStream.never()\n");
+  RivuletStream *stream = rivulet_stream_never ();
   stream->add_listener (stream, listener);
   int length = array->length (array);
   if (length != 0) {

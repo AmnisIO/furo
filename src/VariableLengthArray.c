@@ -38,7 +38,6 @@ static void *_get (VariableLengthArray *array, int index) {
 static void _insert (VariableLengthArray *array, int index, void *data) {
   if (index < 0 || index > array->index) return;
   array->memory[index] = data;
-
 }
 
 static int _remove (VariableLengthArray *array, int index) {

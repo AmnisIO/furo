@@ -9,7 +9,7 @@ typedef enum RivuletTaskType {
 
 typedef unsigned long Milliseconds;
 typedef int RivuletTaskIdentifier;
-typedef void (*rivulet_task)(void *argument);
+typedef void (*rivulet_task) (void *argument);
 
 typedef struct RivuletTask {
   RivuletTaskIdentifier _id;
