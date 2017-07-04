@@ -6,6 +6,6 @@
 
 typedef size_t Size;
 
-void* xmalloc(Size size);
+void *xmalloc (Size size);
 
 #endif // RIVULET_UTILS_H

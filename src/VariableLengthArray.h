@@ -4,7 +4,7 @@
 #include "RivuletUtils.h"
 #include "Boolean.h"
 
-typedef Boolean (*variable_length_array_is_equal) (void* data, void* to_find);
+typedef Boolean (*variable_length_array_is_equal) (void *data, void *to_find);
 
 typedef struct VariableLengthArray {
   void **memory;

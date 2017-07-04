@@ -15,7 +15,7 @@ typedef struct RivuletTimer {
   void (*tick) ();
 } RivuletTimer;
 
-void rivulet_timer_initialize(rivulet_timer_get_milliseconds get_milliseconds);
+void rivulet_timer_initialize (rivulet_timer_get_milliseconds get_milliseconds);
 extern RivuletTimer *rivulet_timer;
 
 #endif //RIVULET_TIMER_H
