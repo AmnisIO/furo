@@ -6,7 +6,6 @@ static Boolean TRUE = 1;
 typedef struct SampleListener {
   RivuletObservableType type;
   rivulet_listener_internal_next _next;
-  rivulet_listener_internal_error _error;
   rivulet_listener_internal_complete _complete;
   RivuletSample *operator;
 } SampleListener;
@@ -16,13 +15,6 @@ static void _sample_listener_next (RivuletListenerInternal *self, int value) {
   if (listener->operator == NULL) return;
   listener->operator->_has = TRUE;
   listener->operator->_value = value;
-}
-
-static void _sample_listener_error (RivuletListenerInternal *self, int error) {
-  SampleListener *listener = (SampleListener *) self;
-  RivuletListenerInternal *internal_listener = (RivuletListenerInternal *) listener->operator;
-  if (internal_listener == NULL) return;
-  rivulet_listener_internal_error_get (internal_listener) (internal_listener, error);
 }
 
 static void _sample_listener_complete (RivuletListenerInternal *self) {
@@ -36,7 +28,6 @@ SampleListener *sample_listener_create (RivuletSample *operator) {
   SampleListener *listener = xmalloc (sizeof (SampleListener));
   listener->type = RIVULET_OBSERVABLE_TYPE_LISTENER_INTERNAL;
   listener->_next = _sample_listener_next;
-  listener->_error = _sample_listener_error;
   listener->_complete = _sample_listener_complete;
   listener->operator = operator;
   return listener;
@@ -64,12 +55,6 @@ static void _next (RivuletListenerInternal *self, int value) {
   operator->_has = FALSE;
 }
 
-static void _error (RivuletListenerInternal *self, int error) {
-  RivuletSample *operator = (RivuletSample *) self;
-  if (operator->out == NULL) return;
-  operator->out->_error ((RivuletListenerInternal *) operator->out, error);
-}
-
 static void _complete (RivuletListenerInternal *self) {
   RivuletSample *operator = (RivuletSample *) self;
   RivuletListenerInternal *out = (RivuletListenerInternal *) operator->out;
@@ -87,7 +72,6 @@ RivuletSample *rivulet_sample_create (RivuletStream *in, RivuletStream *to_sampl
   operator->_start = _start;
   operator->_stop = _stop;
   operator->_next = _next;
-  operator->_error = _error;
   operator->_complete = _complete;
   operator->_has = FALSE;
   operator->_to_sample = to_sample;

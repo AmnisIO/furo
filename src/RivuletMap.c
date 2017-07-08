@@ -19,12 +19,6 @@ static void _next (RivuletListenerInternal *self, int value) {
   operator->out->_next ((RivuletListenerInternal *) operator->out, mapped);
 }
 
-static void _error (RivuletListenerInternal *self, int error) {
-  RivuletMap *operator = (RivuletMap *) self;
-  operator->out->_error ((RivuletListenerInternal *) operator->out, error);
-
-}
-
 static void _complete (RivuletListenerInternal *self) {
   RivuletMap *operator = (RivuletMap *) self;
   operator->out->_complete ((RivuletListenerInternal *) operator->out);
@@ -39,7 +33,6 @@ RivuletMap *rivulet_map_create (RivuletStream *in, rivulet_map_function map) {
   operator->_start = _start;
   operator->_stop = _stop;
   operator->_next = _next;
-  operator->_error = _error;
   operator->_complete = _complete;
   return operator;
 }

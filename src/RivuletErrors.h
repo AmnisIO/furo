@@ -1,9 +1,0 @@
-#ifndef RIVULET_ERRORS_H
-#define RIVULET_ERRORS_H
-
-enum RivuletErrors {
-  UNKNOWN,
-  RIVULET_ERROR_LAST_NO_VALUE_IN_LAST_INPUT
-};
-
-#endif //RIVULET_ERRORS_H

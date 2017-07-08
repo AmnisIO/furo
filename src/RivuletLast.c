@@ -1,5 +1,4 @@
 #include "RivuletLast.h"
-#include "RivuletErrors.h"
 
 static Boolean FALSE = 0;
 static Boolean TRUE = 1;
@@ -23,12 +22,6 @@ static void _next (RivuletListenerInternal *self, int value) {
   operator->_value = value;
 }
 
-static void _error (RivuletListenerInternal *self, int error) {
-  RivuletLast *operator = (RivuletLast *) self;
-  if (operator->out == NULL) return;
-  operator->out->_error ((RivuletListenerInternal *) operator->out, error);
-}
-
 static void _complete (RivuletListenerInternal *self) {
   RivuletLast *operator = (RivuletLast *) self;
   if (operator->out == NULL) return;
@@ -36,8 +29,7 @@ static void _complete (RivuletListenerInternal *self) {
     operator->out->_next ((RivuletListenerInternal *) operator->out, operator->_value);
     operator->out->_complete ((RivuletListenerInternal *) operator->out);
   } else {
-    operator->out->_error ((RivuletListenerInternal *) operator->out,
-                           RIVULET_ERROR_LAST_NO_VALUE_IN_LAST_INPUT);
+    operator->out->_complete ((RivuletListenerInternal *) operator->out);
   }
 }
 
@@ -49,7 +41,6 @@ RivuletLast *rivulet_last_create (RivuletStream *in) {
   operator->_start = _start;
   operator->_stop = _stop;
   operator->_next = _next;
-  operator->_error = _error;
   operator->_complete = _complete;
   operator->_has = FALSE;
   return operator;
