@@ -345,6 +345,23 @@ void test_never () {
   printf ("PASSED\n");
 }
 
+typedef struct NewRivuletStream {
+  Boolean type;
+  RivuletProducerInternal *_producer;
+  VariableLengthArray *_internal_listeners;
+  RivuletTaskIdentifier _stop_id;
+} NewRivuletStream;
+
+void test_memory() {
+  printf("size of Boolean: %d bytes\n", (int) sizeof(Boolean));
+  printf("size of int: %d bytes\n", (int) sizeof(int));
+  printf("size of void *: %d bytes\n", (int) sizeof(void *));
+  printf("size of RivuletStream: %d bytes\n", (int) sizeof (RivuletStream));
+  printf("size of RivuletProducer: %d bytes\n", (int) sizeof (RivuletProducer));
+  printf("size of RivuletListener: %d bytes\n", (int) sizeof (RivuletListener));
+  printf("size of NewRivuletStream: %d bytes\n", (int) sizeof(NewRivuletStream));
+}
+
 
 int main () {
   initialize_tests ();
@@ -361,5 +378,6 @@ int main () {
   test_sample ();
   test_empty ();
   test_never ();
+  test_memory ();
   return 0;
 }
