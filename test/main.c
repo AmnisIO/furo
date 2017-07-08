@@ -1,5 +1,6 @@
 #include <RivuletTask.h>
 #include <RivuletTimer.h>
+#include <RivuletProducerPeriodic.h>
 #include "RivuletStream.h"
 
 VariableLengthArray *array = NULL;
@@ -345,6 +346,13 @@ void test_never () {
   printf ("PASSED\n");
 }
 
+typedef struct NewVariableLengthArray {
+    void **memory;
+    Size allocated;
+    Size used;
+    int index;
+} NewVariableLengthArray;
+
 typedef struct NewRivuletStream {
   Boolean type;
   RivuletProducerInternal *_producer;
@@ -352,14 +360,19 @@ typedef struct NewRivuletStream {
   RivuletTaskIdentifier _stop_id;
 } NewRivuletStream;
 
-void test_memory() {
-  printf("size of Boolean: %d bytes\n", (int) sizeof(Boolean));
-  printf("size of int: %d bytes\n", (int) sizeof(int));
-  printf("size of void *: %d bytes\n", (int) sizeof(void *));
-  printf("size of RivuletStream: %d bytes\n", (int) sizeof (RivuletStream));
-  printf("size of RivuletProducer: %d bytes\n", (int) sizeof (RivuletProducer));
-  printf("size of RivuletListener: %d bytes\n", (int) sizeof (RivuletListener));
-  printf("size of NewRivuletStream: %d bytes\n", (int) sizeof(NewRivuletStream));
+void test_memory () {
+  printf ("size of Boolean: %d bytes\n", (int) sizeof (Boolean));
+  printf ("size of int: %d bytes\n", (int) sizeof (int));
+  printf ("size of void *: %d bytes\n", (int) sizeof (void *));
+  printf ("size of VariableLengthArray: %d bytes\n", (int) sizeof (VariableLengthArray));
+  printf ("size of RivuletProducer: %d bytes\n", (int) sizeof (RivuletProducer));
+  printf ("size of RivuletProducerInternal: %d bytes\n", (int) sizeof (RivuletProducerInternal));
+  printf ("size of RivuletListener: %d bytes\n", (int) sizeof (RivuletListener));
+  printf ("size of RivuletListenerInternal: %d bytes\n", (int) sizeof (RivuletListenerInternal));
+  printf ("size of RivuletStream: %d bytes\n", (int) sizeof (RivuletStream));
+  printf ("size of NewRivuletStream: %d bytes\n", (int) sizeof (NewRivuletStream));
+  printf ("space required to create ByteStream.periodic(): %d bytes", (int) (sizeof(RivuletProducerPeriodic) + sizeof(RivuletStream) + sizeof (VariableLengthArray)));
+  printf ("space required to create new ByteStream.periodic(): %d bytes", (int) (sizeof(RivuletProducerPeriodic) + sizeof(NewRivuletStream) + sizeof (NewVariableLengthArray)));
 }
 
 
