@@ -14,7 +14,6 @@ typedef Boolean (*rivulet_stream_filter_function) (int value);
 typedef struct RivuletStream {
   RivuletObservableType type;
   rivulet_listener_internal_next _next;
-  rivulet_listener_internal_error _error;
   rivulet_listener_internal_complete _complete;
   RivuletProducerInternal *_producer;
   VariableLengthArray *_internal_listeners;

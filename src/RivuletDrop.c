@@ -20,11 +20,6 @@ static void _next (RivuletListenerInternal *self, int value) {
   operator->out->_next ((RivuletListenerInternal *) operator->out, value);
 }
 
-static void _error (RivuletListenerInternal *self, int error) {
-  RivuletDrop *operator = (RivuletDrop *) self;
-  operator->out->_error ((RivuletListenerInternal *) operator->out, error);
-}
-
 static void _complete (RivuletListenerInternal *self) {
   RivuletDrop *operator = (RivuletDrop *) self;
   operator->out->_complete ((RivuletListenerInternal *) operator->out);
@@ -39,7 +34,6 @@ RivuletDrop *rivulet_drop_create (RivuletStream *in, int count) {
   operator->_start = _start;
   operator->_stop = _stop;
   operator->_next = _next;
-  operator->_error = _error;
   operator->_complete = _complete;
   return operator;
 }

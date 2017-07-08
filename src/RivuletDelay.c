@@ -45,13 +45,6 @@ static void *delayed_error_create (RivuletDelay *operator, int error) {
   return delayed_error;
 }
 
-static void _send_error (void *self) {
-  DelayedError *delayed_error = self;
-  RivuletDelay *operator = delayed_error->operator;
-  if (operator->out == NULL) return;
-  operator->out->_error ((RivuletListenerInternal *) operator->out, delayed_error->error);
-}
-
 typedef struct DelayedComplete {
   RivuletDelay *operator;
 } DelayedComplete;
@@ -75,12 +68,6 @@ static void _next (RivuletListenerInternal *self, int value) {
   rivulet_timer->set_timeout (_send_next, delayed_next_create (operator, value), operator->_delay);
 }
 
-static void _error (RivuletListenerInternal *self, int error) {
-  RivuletDelay *operator = (RivuletDelay *) self;
-  if (operator->out == NULL) return;
-  rivulet_timer->set_timeout (_send_error, delayed_error_create (operator, error), operator->_delay);
-}
-
 static void _complete (RivuletListenerInternal *self) {
   RivuletDelay *operator = (RivuletDelay *) self;
   if (operator->out == NULL) return;
@@ -96,7 +83,6 @@ RivuletDelay *byte_delay_create (RivuletStream *in, int delay) {
   operator->_start = _start;
   operator->_stop = _stop;
   operator->_next = _next;
-  operator->_error = _error;
   operator->_complete = _complete;
   return operator;
 }

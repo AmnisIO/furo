@@ -23,12 +23,6 @@ static void _next (RivuletListenerInternal *self, int value) {
   if (taken == to_take) operator->out->_complete ((RivuletListenerInternal *) operator->out);
 }
 
-static void _error (RivuletListenerInternal *self, int error) {
-  RivuletTake *operator = (RivuletTake *) self;
-  operator->out->_error ((RivuletListenerInternal *) operator->out, error);
-
-}
-
 static void _complete (RivuletListenerInternal *self) {
   RivuletTake *operator = (RivuletTake *) self;
   operator->out->_complete ((RivuletListenerInternal *) operator->out);
@@ -44,7 +38,6 @@ RivuletTake *rivulet_take_create (RivuletStream *in, int count) {
   operator->_start = _start;
   operator->_stop = _stop;
   operator->_next = _next;
-  operator->_error = _error;
   operator->_complete = _complete;
   return operator;
 }

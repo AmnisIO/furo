@@ -1,11 +1,9 @@
 #include <RivuletTask.h>
 #include <RivuletTimer.h>
-#include <RivuletErrors.h>
 #include "RivuletStream.h"
 
 VariableLengthArray *array = NULL;
 RivuletListener *listener = NULL;
-int error_code = -1;
 
 static Milliseconds _milliseconds = 0;
 
@@ -20,22 +18,18 @@ extern void reset_milliseconds () {
 void _next (RivuletListener *self, int value) {
   array->push (array, (void *) (Size) value);
 }
-void _error (RivuletListener *self, int error) {
-  error_code = error;
-}
 void _complete (RivuletListener *self) {
 
 }
 
 void initialize_tests () {
   array = variable_length_array_create ();
-  listener = rivulet_listener_create (_next, _error, _complete);
+  listener = rivulet_listener_create (_next, _complete);
   rivulet_timer_initialize (get_milliseconds);
 }
 
 void reset () {
   array->clear (array);
-  error_code = -1;
   reset_milliseconds ();
   rivulet_timer->_tasks->clear (rivulet_timer->_tasks);
 }
@@ -204,10 +198,6 @@ void test_last () {
   stream_last->add_listener (stream_last, listener);
   length = array->length (array);
   if (length != 0) {
-    printf ("FAILED\n");
-    return;
-  }
-  if (error_code != RIVULET_ERROR_LAST_NO_VALUE_IN_LAST_INPUT) {
     printf ("FAILED\n");
     return;
   }

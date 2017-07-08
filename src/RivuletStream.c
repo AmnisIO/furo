@@ -24,20 +24,6 @@ static void _next (RivuletListenerInternal *self, int value) {
   }
 }
 
-static void _error (RivuletListenerInternal *self, int error) {
-  RivuletStream *stream = (RivuletStream *) self;
-  if (stream->_error_code != ERROR_NONE) return;
-  stream->_error_code = error;
-  VariableLengthArray *internal_listeners = stream->_internal_listeners;
-  int length = internal_listeners->length (internal_listeners);
-  if (length == 0) return;
-  for (int i = 0; i < length; i++) {
-    RivuletListenerInternal *listener = internal_listeners->get (internal_listeners, i);
-    rivulet_listener_internal_error_get (listener) (listener, error);
-  }
-  stream->_teardown (stream);
-}
-
 static void _complete (RivuletListenerInternal *self) {
   RivuletStream *stream = (RivuletStream *) self;
   VariableLengthArray *internal_listeners = stream->_internal_listeners;
@@ -115,7 +101,6 @@ static RivuletStream *_create (RivuletProducerInternal *producer) {
   stream->type = RIVULET_OBSERVABLE_TYPE_STREAM;
   stream->_producer = producer;
   stream->_next = _next;
-  stream->_error = _error;
   stream->_complete = _complete;
   stream->_teardown = _teardown;
   stream->_stop_now = _stop_now;
