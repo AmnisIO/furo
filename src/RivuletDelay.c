@@ -33,18 +33,6 @@ static void _send_next (void *self) {
   operator->out->_next ((RivuletListenerInternal *) operator->out, delayed_emit->value);
 }
 
-typedef struct DelayedError {
-  RivuletDelay *operator;
-  int error;
-} DelayedError;
-
-static void *delayed_error_create (RivuletDelay *operator, int error) {
-  DelayedError *delayed_error = xmalloc (sizeof (DelayedError));
-  delayed_error->operator = operator;
-  delayed_error->error = error;
-  return delayed_error;
-}
-
 typedef struct DelayedComplete {
   RivuletDelay *operator;
 } DelayedComplete;
