@@ -371,8 +371,9 @@ void test_memory () {
   printf ("size of RivuletListenerInternal: %d bytes\n", (int) sizeof (RivuletListenerInternal));
   printf ("size of RivuletStream: %d bytes\n", (int) sizeof (RivuletStream));
   printf ("size of NewRivuletStream: %d bytes\n", (int) sizeof (NewRivuletStream));
-  printf ("space required to create ByteStream.periodic(): %d bytes", (int) (sizeof(RivuletProducerPeriodic) + sizeof(RivuletStream) + sizeof (VariableLengthArray)));
-  printf ("space required to create new ByteStream.periodic(): %d bytes", (int) (sizeof(RivuletProducerPeriodic) + sizeof(NewRivuletStream) + sizeof (NewVariableLengthArray)));
+  printf ("size of NewVariableLengthArray: %d bytes\n", (int) sizeof (NewVariableLengthArray));
+  printf ("space required to create ByteStream.periodic(): %d bytes\n", (int) (sizeof(RivuletProducerPeriodic) + sizeof(RivuletStream) + sizeof (VariableLengthArray)));
+  printf ("space required to create new ByteStream.periodic(): %d bytes\n", (int) (sizeof(RivuletProducerPeriodic) + sizeof(NewRivuletStream) + sizeof (NewVariableLengthArray)));
 }
 
 
