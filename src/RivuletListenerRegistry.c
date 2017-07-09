@@ -26,11 +26,9 @@ void rivulet_listener_registry_initialize () {
   rivulet_array_initialize (&(registry->registrations));
 }
 
-RivuletListenerType
-rivulet_listener_registry_register (rivulet_listener_next next, rivulet_listener_complete complete) {
+RivuletListenerType rivulet_listener_registry_register (rivulet_listener_next next, rivulet_listener_complete complete) {
   if (registry == NULL) rivulet_listener_registry_initialize ();
-  return (RivuletListenerType) rivulet_array_push (registry->registrations,
-                                                   _create_registration (next, complete));
+  return (RivuletListenerType) (rivulet_array_push (registry->registrations, _create_registration (next, complete)) - 1);
 }
 
 RivuletListenerRegistration *rivulet_listener_registry_get (RivuletListenerType type) {

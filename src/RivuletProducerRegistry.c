@@ -27,7 +27,7 @@ void rivulet_producer_registry_initialize () {
 
 RivuletProducerType rivulet_producer_registry_register (rivulet_producer_start start, rivulet_producer_stop stop) {
   if (registry == NULL) rivulet_producer_registry_initialize ();
-  return (RivuletProducerType) rivulet_array_push (registry->registrations, _create_registration (start, stop));
+  return (RivuletProducerType) (rivulet_array_push (registry->registrations, _create_registration (start, stop)) - 1);
 }
 
 RivuletProducerRegistration *rivulet_producer_registry_get (RivuletProducerType type) {
