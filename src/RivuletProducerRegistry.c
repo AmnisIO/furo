@@ -1,6 +1,18 @@
 #include "RivuletProducerRegistry.h"
 #include "RivuletArray.h"
 
+typedef struct RivuletProducerRegistration {
+  rivulet_producer_start start;
+  rivulet_producer_stop stop;
+} RivuletProducerRegistration;
+
+static RivuletProducerRegistration *_create_registration (rivulet_producer_start start, rivulet_producer_stop stop) {
+  RivuletProducerRegistration *registration = xmalloc (sizeof (RivuletProducerRegistration));
+  registration->start = start;
+  registration->stop = stop;
+  return registration;
+}
+
 typedef struct RivuletProducerRegistry {
   RivuletArray *registrations;
 } RivuletProducerRegistry;
@@ -13,9 +25,9 @@ void rivulet_producer_registry_initialize () {
   rivulet_array_initialize (&(registry->registrations));
 }
 
-RivuletProducerType rivulet_producer_registry_register (RivuletProducerRegistration *registration) {
+RivuletProducerType rivulet_producer_registry_register (rivulet_producer_start start, rivulet_producer_stop stop) {
   if (registry == NULL) rivulet_producer_registry_initialize ();
-  return (RivuletProducerType) rivulet_array_push (registry->registrations, registration);
+  return (RivuletProducerType) rivulet_array_push (registry->registrations, _create_registration (start, stop));
 }
 
 RivuletProducerRegistration *rivulet_producer_registry_get (RivuletProducerType type) {
