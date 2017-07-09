@@ -1,16 +1,18 @@
 #include "RivuletDelay.h"
 #include "RivuletTimer.h"
+#include "RivuletListenerRegistry.h"
+#include "RivuletProducerRegistry.h"
 
-static void _start (RivuletProducerInternal *self, RivuletListenerInternal *out) {
+static void _start (RivuletProducer *self, RivuletListener *out) {
   RivuletDelay *operator = (RivuletDelay *) self;
   RivuletStream *stream = (RivuletStream *) out;
   operator->out = stream;
-  operator->in->_add (operator->in, (RivuletListenerInternal *) operator);
+  rivulet_operator_in_add (operator);
 }
 
-static void _stop (RivuletProducerInternal *self) {
+static void _stop (RivuletProducer *self) {
   RivuletDelay *operator = (RivuletDelay *) self;
-  operator->in->_remove (operator->in, (RivuletListenerInternal *) operator);
+  rivulet_operator_in_remove (operator);
   operator->out = NULL;
 }
 
@@ -30,7 +32,7 @@ static void _send_next (void *self) {
   DelayedNext *delayed_emit = self;
   RivuletDelay *operator = delayed_emit->operator;
   if (operator->out == NULL) return;
-  operator->out->_next ((RivuletListenerInternal *) operator->out, delayed_emit->value);
+  rivulet_operator_out_next (operator, delayed_emit->value);
 }
 
 typedef struct DelayedComplete {
@@ -47,30 +49,39 @@ static void _send_complete (void *self) {
   DelayedComplete *delayed_complete = self;
   RivuletDelay *operator = delayed_complete->operator;
   if (operator->out == NULL) return;
-  operator->out->_complete ((RivuletListenerInternal *) operator->out);
+  rivulet_operator_out_complete (operator);;
 }
 
-static void _next (RivuletListenerInternal *self, int value) {
+static void _next (RivuletListener *self, int value) {
   RivuletDelay *operator = (RivuletDelay *) self;
   if (operator->out == NULL) return;
   rivulet_timer->set_timeout (_send_next, delayed_next_create (operator, value), operator->_delay);
 }
 
-static void _complete (RivuletListenerInternal *self) {
+static void _complete (RivuletListener *self) {
   RivuletDelay *operator = (RivuletDelay *) self;
   if (operator->out == NULL) return;
   rivulet_timer->set_timeout (_send_complete, delayed_complete_create (operator), operator->_delay);
 }
 
-RivuletDelay *byte_delay_create (RivuletStream *in, int delay) {
+
+static Boolean _registered = 0;
+static RivuletListenerType _listener_type = 0;
+static RivuletProducerType _producer_type = 0;
+
+static void _register () {
+  if (_registered) return;
+  _listener_type = rivulet_listener_registry_register (_next, _complete);
+  _producer_type = rivulet_producer_registry_register (_start, _stop);
+  _registered = 1;
+}
+
+RivuletProducer *byte_delay_create (RivuletStream *in, int delay) {
   RivuletDelay *operator = xmalloc (sizeof (RivuletDelay));
-  byte_byte_operator_initialize ((RivuletOperator *) operator);
-  operator->operation = RIVULET_OPERATOR_DELAY;
+  _register ();
+  operator->listener_type = _listener_type;
+  operator->producer_type = _producer_type;
   operator->in = in;
   operator->_delay = delay;
-  operator->_start = _start;
-  operator->_stop = _stop;
-  operator->_next = _next;
-  operator->_complete = _complete;
-  return operator;
+  return (RivuletProducer *) operator;
 }
