@@ -24,6 +24,12 @@ static void _next (RivuletListenerInternal *self, int value) {
   }
 }
 
+static void _teardown (RivuletStream *self) {
+  if (rivulet_array_length (self->_internal_listeners) == 0) return;
+  if (self->_producer != NULL) self->_producer->_stop (self->_producer);
+  rivulet_array_clear (self->_internal_listeners);
+}
+
 static void _complete (RivuletListenerInternal *self) {
   RivuletStream *stream = (RivuletStream *) self;
   RivuletArray *internal_listeners = stream->_internal_listeners;
@@ -33,13 +39,7 @@ static void _complete (RivuletListenerInternal *self) {
     RivuletListenerInternal *listener = rivulet_array_get (internal_listeners, i);
     rivulet_listener_internal_complete_get (listener) (listener);
   }
-  stream->_teardown (stream);
-}
-
-static void _teardown (RivuletStream *self) {
-  if (rivulet_array_length (self->_internal_listeners) == 0) return;
-  if (self->_producer != NULL) self->_producer->_stop (self->_producer);
-  rivulet_array_clear (self->_internal_listeners);
+  _teardown (stream);
 }
 
 static void _stop_now (RivuletStream *self) {
@@ -62,7 +62,7 @@ static void _add (RivuletStream *stream, RivuletListenerInternal *listener) {
 
 static void _stop_stream (void *any) {
   RivuletStream *stream = (RivuletStream *) any;
-  stream->_stop_now (stream);
+  _stop_now (stream);
 }
 
 static void _remove (RivuletStream *stream, RivuletListenerInternal *listener) {
@@ -99,8 +99,6 @@ static RivuletStream *_create (RivuletProducerInternal *producer) {
   stream->_producer = producer;
   stream->_next = _next;
   stream->_complete = _complete;
-  stream->_teardown = _teardown;
-  stream->_stop_now = _stop_now;
   stream->_add = _add;
   stream->_remove = _remove;
   variable_length_array_initialize (&(stream->_internal_listeners));
