@@ -6,9 +6,8 @@ static Boolean FALSE = 0;
 static Boolean TRUE = 1;
 
 typedef struct SampleListener {
-  RivuletObservableType type;
-  rivulet_listener_internal_next _next;
-  rivulet_listener_internal_complete _complete;
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
   RivuletSample *operator;
 } SampleListener;
 
@@ -23,14 +22,24 @@ static void _sample_listener_complete (RivuletListener *self) {
   SampleListener *listener = (SampleListener *) self;
   RivuletListener *internal_listener = (RivuletListener *) listener->operator;
   if (internal_listener == NULL) return;
-  rivulet_listener_internal_complete_get (internal_listener) (internal_listener);
+  rivulet_listener_registry_get_complete (internal_listener->listener_type) (internal_listener);
+}
+
+static Boolean _sample_listener_registered = 0;
+static RivuletListenerType _sample_listener_listener_type = 0;
+static RivuletProducerType _sample_listener_producer_type = 0;
+
+static void _sample_listener_register () {
+  if (_sample_listener_registered) return;
+  _sample_listener_listener_type = rivulet_listener_registry_register (_sample_listener_next, _sample_listener_complete);
+  _sample_listener_registered = 1;
 }
 
 SampleListener *sample_listener_create (RivuletSample *operator) {
   SampleListener *listener = xmalloc (sizeof (SampleListener));
-  listener->type = RIVULET_OBSERVABLE_TYPE_LISTENER_INTERNAL;
-  listener->_next = _sample_listener_next;
-  listener->_complete = _sample_listener_complete;
+  _sample_listener_register ();
+  listener->listener_type = _sample_listener_listener_type;
+  listener->producer_type = _sample_listener_producer_type;
   listener->operator = operator;
   return listener;
 }
@@ -53,7 +62,7 @@ static void _stop (RivuletProducer *self) {
 static void _next (RivuletListener *self, int value) {
   RivuletSample *operator = (RivuletSample *) self;
   if (!operator->_has) return;
-  operator->out->_next ((RivuletListener *) operator->out, operator->_value);
+  rivulet_operator_out_next (operator, operator->_value);
   operator->_has = FALSE;
 }
 
@@ -61,9 +70,9 @@ static void _complete (RivuletListener *self) {
   RivuletSample *operator = (RivuletSample *) self;
   RivuletListener *out = (RivuletListener *) operator->out;
   if (out == NULL) return;
-  if (operator->_has) rivulet_listener_internal_next_get (out) (out, operator->_value);
+  if (operator->_has) rivulet_operator_out_next (operator, operator->_value);
   operator->_has = FALSE;
-  rivulet_listener_internal_complete_get (out) (out);
+  rivulet_operator_out_complete (operator);
 }
 
 static Boolean _registered = 0;
