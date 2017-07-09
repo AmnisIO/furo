@@ -16,18 +16,16 @@ typedef struct RivuletStream {
   RivuletProducer *_producer;
   RivuletArray *_internal_listeners;
   int _stop_id;
-  void (*_add) (struct RivuletStream *, RivuletListener *);
-  void (*_remove) (struct RivuletStream *, RivuletListener *);
-  void (*add_listener) (struct RivuletStream *, RivuletListener *);
-  void (*remove_listener) (struct RivuletStream *, RivuletListener *);
-  struct RivuletStream *(*map) (struct RivuletStream *, rivulet_stream_map_function);
-  struct RivuletStream *(*map_to) (struct RivuletStream *, int);
-  struct RivuletStream *(*filter) (struct RivuletStream *, rivulet_stream_filter_function);
-  struct RivuletStream *(*take) (struct RivuletStream *, int);
-  struct RivuletStream *(*drop) (struct RivuletStream *, int);
-  struct RivuletStream *(*last) (struct RivuletStream *);
-  struct RivuletStream *(*sample) (struct RivuletStream *, struct RivuletStream *);
-  struct RivuletStream *(*delay) (struct RivuletStream *, int);
+  void (*rivulet_stream_add_listener) (struct RivuletStream *, RivuletListener *);
+  void (*_rivulet_stream_remove_listener) (struct RivuletStream *, RivuletListener *);
+  struct RivuletStream *(*rivulet_stream_map) (struct RivuletStream *, rivulet_stream_map_function);
+  struct RivuletStream *(*rivulet_stream_map_to) (struct RivuletStream *, int);
+  struct RivuletStream *(*rivulet_stream_filter) (struct RivuletStream *, rivulet_stream_filter_function);
+  struct RivuletStream *(*rivulet_stream_take) (struct RivuletStream *, int);
+  struct RivuletStream *(*rivulet_stream_drop) (struct RivuletStream *, int);
+  struct RivuletStream *(*rivulet_stream_last) (struct RivuletStream *);
+  struct RivuletStream *(*rivulet_stream_sample) (struct RivuletStream *, struct RivuletStream *);
+  struct RivuletStream *(*rivulet_stream_delay) (struct RivuletStream *, int);
 } RivuletStream;
 
 RivuletStream *rivulet_stream_create (RivuletProducer *producer);
