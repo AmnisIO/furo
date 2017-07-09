@@ -1,6 +1,7 @@
 #include <RivuletTask.h>
 #include <RivuletTimer.h>
 #include <RivuletProducerPeriodic.h>
+#include <RivuletOperator.h>
 #include "RivuletStream.h"
 
 RivuletArray *array = NULL;
@@ -366,10 +367,9 @@ void test_memory () {
   printf ("size of void *: %d bytes\n", (int) sizeof (void *));
   printf ("size of RivuletArray: %d bytes\n", (int) sizeof (RivuletArray));
   printf ("size of RivuletProducer: %d bytes\n", (int) sizeof (RivuletProducer));
-  printf ("size of RivuletProducer: %d bytes\n", (int) sizeof (RivuletProducer));
-  printf ("size of RivuletListener: %d bytes\n", (int) sizeof (RivuletListener));
   printf ("size of RivuletListener: %d bytes\n", (int) sizeof (RivuletListener));
   printf ("size of RivuletStream: %d bytes\n", (int) sizeof (RivuletStream));
+  printf ("size of RivuletOperator: %d bytes\n", (int) sizeof (RivuletOperator));
   printf ("size of NewRivuletStream: %d bytes\n", (int) sizeof (NewRivuletStream));
   printf ("size of NewVariableLengthArray: %d bytes\n", (int) sizeof (NewVariableLengthArray));
   printf ("space required to create ByteStream.periodic(): %d bytes\n", (int) (sizeof(RivuletProducerPeriodic) + sizeof(RivuletStream) + sizeof (RivuletArray)));
