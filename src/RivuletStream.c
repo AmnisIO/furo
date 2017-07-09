@@ -15,32 +15,32 @@ int ERROR_NONE = 0;
 
 static void _next (RivuletListenerInternal *self, int value) {
   RivuletStream *stream = (RivuletStream *) self;
-  VariableLengthArray *internal_listeners = stream->_internal_listeners;
-  int length = internal_listeners->length (internal_listeners);
+  RivuletArray *internal_listeners = stream->_internal_listeners;
+  int length = rivulet_array_length (internal_listeners);
   if (length == 0) return;
   for (int i = 0; i < length; i++) {
-    RivuletListenerInternal *listener = internal_listeners->get (internal_listeners, i);
+    RivuletListenerInternal *listener = rivulet_array_get (internal_listeners, i);
     rivulet_listener_internal_next_get (listener) (listener, value);
   }
 }
 
 static void _complete (RivuletListenerInternal *self) {
   RivuletStream *stream = (RivuletStream *) self;
-  VariableLengthArray *internal_listeners = stream->_internal_listeners;
-  int length = internal_listeners->length (internal_listeners);
+  RivuletArray *internal_listeners = stream->_internal_listeners;
+  int length = rivulet_array_length (internal_listeners);
   if (length == 0) return;
   for (int i = 0; i < length; i++) {
-    RivuletListenerInternal *listener = internal_listeners->get (internal_listeners, i);
+    RivuletListenerInternal *listener = rivulet_array_get (internal_listeners, i);
     rivulet_listener_internal_complete_get (listener) (listener);
   }
   stream->_teardown (stream);
 }
 
 static void _teardown (RivuletStream *self) {
-  if (self->_internal_listeners->length (self->_internal_listeners) == 0) return;
+  if (rivulet_array_length (self->_internal_listeners) == 0) return;
   if (self->_producer != NULL) self->_producer->_stop (self->_producer);
   self->_error_code = ERROR_NONE;
-  self->_internal_listeners->clear (self->_internal_listeners);
+  rivulet_array_clear (self->_internal_listeners);
 }
 
 static void _stop_now (RivuletStream *self) {
@@ -50,8 +50,8 @@ static void _stop_now (RivuletStream *self) {
 }
 
 static void _add (RivuletStream *stream, RivuletListenerInternal *listener) {
-  VariableLengthArray *internal_listeners = stream->_internal_listeners;
-  int length = internal_listeners->push (internal_listeners, listener);
+  RivuletArray *internal_listeners = stream->_internal_listeners;
+  int length = rivulet_array_push (internal_listeners, listener);
   if (length > 1) return;
   if (stream->_stop_id != STOP_ID_NONE) {
     rivulet_timer->clear_task (stream->_stop_id);
@@ -68,10 +68,10 @@ static void _stop_stream (void *any) {
 }
 
 static void _remove (RivuletStream *stream, RivuletListenerInternal *listener) {
-  VariableLengthArray *internal_listeners = stream->_internal_listeners;
-  int index = internal_listeners->index_of (internal_listeners, listener);
+  RivuletArray *internal_listeners = stream->_internal_listeners;
+  int index = rivulet_array_index_of (internal_listeners, listener);
   if (index > -1) {
-    int length = internal_listeners->remove (internal_listeners, index);
+    int length = rivulet_array_remove (internal_listeners, index);
     if (stream->_producer != NULL && length == 0) {
       stream->_error_code = ERROR_NONE;
       stream->_stop_id = rivulet_timer->set_timeout (_stop_stream, stream, 0);
@@ -178,7 +178,7 @@ RivuletStream *rivulet_stream_empty () {
   return rivulet_stream_create (rivulet_producer_create (_complete_immediately, _never_stop));
 }
 
-RivuletStream *rivulet_stream_from_variable_length_array (VariableLengthArray *array) {
+RivuletStream *rivulet_stream_from_variable_length_array (RivuletArray *array) {
   return rivulet_stream_create (rivulet_producer_from_variable_length_array (array));
 }
 

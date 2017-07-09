@@ -3,7 +3,7 @@
 
 #include "RivuletListener.h"
 #include "RivuletProducer.h"
-#include "VariableLengthArray.h"
+#include "RivuletArray.h"
 #include "Boolean.h"
 #include "RivuletProducerFromArray.h"
 #include "RivuletListernerManager.h"
@@ -16,7 +16,7 @@ typedef struct RivuletStream {
   rivulet_listener_internal_next _next;
   rivulet_listener_internal_complete _complete;
   RivuletProducerInternal *_producer;
-  VariableLengthArray *_internal_listeners;
+  RivuletArray *_internal_listeners;
   int _stop_id;
   int _error_code;
   void (*_teardown) (struct RivuletStream *self);
@@ -38,7 +38,7 @@ typedef struct RivuletStream {
 RivuletStream *rivulet_stream_create (RivuletProducer *producer);
 RivuletStream *rivulet_stream_never ();
 RivuletStream *rivulet_stream_empty ();
-RivuletStream *rivulet_stream_from_variable_length_array (VariableLengthArray *array);
+RivuletStream *rivulet_stream_from_variable_length_array (RivuletArray *array);
 RivuletStream *rivulet_stream_from_array (int *array, int size);
 RivuletStream *rivulet_stream_periodic (int period);
 RivuletStream *rivulet_stream_merge (int count, ...);
