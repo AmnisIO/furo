@@ -132,7 +132,7 @@ static RivuletStream *_create (RivuletProducer *producer) {
 }
 
 static RivuletStream *_map (RivuletStream *self, rivulet_map_function map) {
-  return _create ((RivuletProducer *) rivulet_map_create (self, map));
+  return _create (rivulet_map_create (self, map));
 }
 
 static RivuletStream *_map_to (RivuletStream *self, int value) {
