@@ -1,17 +1,12 @@
 #ifndef RIVULET_OBSERVABLE_H
 #define RIVULET_OBSERVABLE_H
 
-typedef enum RivuletObservableType {
-  RIVULET_OBSERVABLE_TYPE_UNKNOWN,
-  RIVULET_OBSERVABLE_TYPE_PRODUCER,
-  RIVULET_OBSERVABLE_TYPE_LISTENER,
-  RIVULET_OBSERVABLE_TYPE_LISTENER_INTERNAL,
-  RIVULET_OBSERVABLE_TYPE_STREAM,
-  RIVULET_OBSERVABLE_TYPE_OPERATOR
-} RivuletObservableType;
+#include "RivuletListenerType.h"
+#include "RivuletProducerType.h"
 
-typedef struct ByteObservable {
-  enum RivuletObservableType type;
-} ByteObservable;
+typedef struct RivuletObservable {
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
+} RivuletObservable;
 
 #endif //RIVULET_OBSERVABLE_H
