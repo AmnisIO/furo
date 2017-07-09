@@ -3,12 +3,12 @@
 
 static void _tick (void *self) {
   RivuletProducerPeriodic *producer = self;
-  RivuletListenerInternal *listener = producer->_listener;
+  RivuletListener *listener = producer->_listener;
   rivulet_listener_internal_next next = rivulet_listener_internal_next_get (listener);
   next (listener, 0);
 }
 
-static void _periodic_start (RivuletProducer *self, RivuletListenerInternal *listener) {
+static void _periodic_start (RivuletProducer *self, RivuletListener *listener) {
   RivuletProducerPeriodic *producer = (RivuletProducerPeriodic *) self;
   producer->_listener = listener;
   producer->_task_id = rivulet_timer->set_interval (_tick, producer, producer->_period);

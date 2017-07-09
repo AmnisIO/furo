@@ -11,7 +11,7 @@ typedef struct RivuletProducerPeriodic {
   rivulet_producer_start start;
   rivulet_producer_stop stop;
   int _period;
-  RivuletListenerInternal *_listener;
+  RivuletListener *_listener;
   RivuletTaskIdentifier _task_id;
 } RivuletProducerPeriodic;
 

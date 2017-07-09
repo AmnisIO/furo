@@ -1,7 +1,7 @@
 #include "RivuletProducerFromArray.h"
 #include "RivuletListernerManager.h"
 
-static void _from_array_start (RivuletProducer *self, RivuletListenerInternal *listener) {
+static void _from_array_start (RivuletProducer *self, RivuletListener *listener) {
   RivuletProducerFromArray *producer = (RivuletProducerFromArray *) self;
   RivuletArray *array = producer->array;
   int length = rivulet_array_length (array);

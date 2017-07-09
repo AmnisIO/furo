@@ -355,7 +355,7 @@ typedef struct NewVariableLengthArray {
 
 typedef struct NewRivuletStream {
   Boolean type;
-  RivuletProducerInternal *_producer;
+  RivuletProducer *_producer;
   RivuletArray *_internal_listeners;
   RivuletTaskIdentifier _stop_id;
 } NewRivuletStream;
@@ -366,9 +366,9 @@ void test_memory () {
   printf ("size of void *: %d bytes\n", (int) sizeof (void *));
   printf ("size of RivuletArray: %d bytes\n", (int) sizeof (RivuletArray));
   printf ("size of RivuletProducer: %d bytes\n", (int) sizeof (RivuletProducer));
-  printf ("size of RivuletProducerInternal: %d bytes\n", (int) sizeof (RivuletProducerInternal));
+  printf ("size of RivuletProducer: %d bytes\n", (int) sizeof (RivuletProducer));
   printf ("size of RivuletListener: %d bytes\n", (int) sizeof (RivuletListener));
-  printf ("size of RivuletListenerInternal: %d bytes\n", (int) sizeof (RivuletListenerInternal));
+  printf ("size of RivuletListener: %d bytes\n", (int) sizeof (RivuletListener));
   printf ("size of RivuletStream: %d bytes\n", (int) sizeof (RivuletStream));
   printf ("size of NewRivuletStream: %d bytes\n", (int) sizeof (NewRivuletStream));
   printf ("size of NewVariableLengthArray: %d bytes\n", (int) sizeof (NewVariableLengthArray));
