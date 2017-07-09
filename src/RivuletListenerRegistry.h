@@ -3,12 +3,7 @@
 
 #include "RivuletListener.h"
 
-typedef struct RivuletListenerRegistration {
-  rivulet_listener_next next;
-  rivulet_listener_complete complete;
-} RivuletListenerRegistration;
-
-RivuletListenerType rivulet_listener_registry_register (RivuletListenerRegistration *);
+RivuletListenerType rivulet_listener_registry_register (rivulet_listener_next, rivulet_listener_complete);
 rivulet_listener_next rivulet_listener_registry_get_next (RivuletListenerType);
 rivulet_listener_complete rivulet_listener_registry_get_complete (RivuletListenerType);
 
