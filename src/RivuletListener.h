@@ -12,4 +12,6 @@ typedef struct RivuletListener {
 typedef void (*rivulet_listener_next) (RivuletListener *, int);
 typedef void (*rivulet_listener_complete) (RivuletListener *);
 
+RivuletListener *rivulet_listener_create(rivulet_listener_next, rivulet_listener_complete);
+
 #endif //RIVULET_LISTENER_H
