@@ -2,6 +2,7 @@
 #include "RivuletUtils.h"
 #include "Boolean.h"
 #include "RivuletProducerRegistry.h"
+#include "RivuletListenerRegistry.h"
 
 static void _start (struct RivuletProducer *self, struct RivuletListener *listener) {
   rivulet_listener_registry_get_complete (listener->listener_type) (listener);
