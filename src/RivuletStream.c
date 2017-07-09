@@ -39,13 +39,11 @@ static void _complete (RivuletListenerInternal *self) {
 static void _teardown (RivuletStream *self) {
   if (rivulet_array_length (self->_internal_listeners) == 0) return;
   if (self->_producer != NULL) self->_producer->_stop (self->_producer);
-  self->_error_code = ERROR_NONE;
   rivulet_array_clear (self->_internal_listeners);
 }
 
 static void _stop_now (RivuletStream *self) {
   if (self->_producer != NULL) self->_producer->_stop (self->_producer);
-  self->_error_code = ERROR_NONE;
   self->_stop_id = STOP_ID_NONE;
 }
 
@@ -73,7 +71,6 @@ static void _remove (RivuletStream *stream, RivuletListenerInternal *listener) {
   if (index > -1) {
     int length = rivulet_array_remove (internal_listeners, index);
     if (stream->_producer != NULL && length == 0) {
-      stream->_error_code = ERROR_NONE;
       stream->_stop_id = rivulet_timer->set_timeout (_stop_stream, stream, 0);
     }
   }
@@ -108,7 +105,6 @@ static RivuletStream *_create (RivuletProducerInternal *producer) {
   stream->_remove = _remove;
   variable_length_array_initialize (&(stream->_internal_listeners));
   stream->_stop_id = STOP_ID_NONE;
-  stream->_error_code = ERROR_NONE;
   stream->add_listener = _add_listener;
   stream->remove_listener = _remove_listener;
   stream->map = _map;

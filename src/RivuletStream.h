@@ -18,7 +18,6 @@ typedef struct RivuletStream {
   RivuletProducerInternal *_producer;
   RivuletArray *_internal_listeners;
   int _stop_id;
-  int _error_code;
   void (*_teardown) (struct RivuletStream *self);
   void (*_stop_now) (struct RivuletStream *self);
   void (*_add) (struct RivuletStream *self, RivuletListenerInternal *listener);
