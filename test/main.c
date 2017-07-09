@@ -345,13 +345,6 @@ void test_never () {
   printf ("PASSED\n");
 }
 
-typedef struct NewRivuletStream {
-  Boolean type;
-  RivuletProducer *_producer;
-  RivuletArray *_internal_listeners;
-  RivuletTaskIdentifier _stop_id;
-} NewRivuletStream;
-
 void test_memory () {
   printf ("size of Boolean: %d bytes\n", (int) sizeof (Boolean));
   printf ("size of int: %d bytes\n", (int) sizeof (int));
@@ -365,11 +358,8 @@ void test_memory () {
           (int) (sizeof (RivuletListener) + sizeof (rivulet_listener_next) + sizeof (rivulet_listener_complete) + sizeof (void *)));
   printf ("size of RivuletStream: %d bytes\n", (int) sizeof (RivuletStream));
   printf ("size of RivuletOperator: %d bytes\n", (int) sizeof (RivuletOperator));
-  printf ("size of NewRivuletStream: %d bytes\n", (int) sizeof (NewRivuletStream));
   printf ("space required to create ByteStream.periodic(): %d bytes\n",
           (int) (sizeof (RivuletProducerPeriodic) + sizeof (RivuletStream) + sizeof (RivuletArray)));
-  printf ("space required to create new ByteStream.periodic(): %d bytes\n",
-          (int) (sizeof (RivuletProducerPeriodic) + sizeof (NewRivuletStream) + sizeof (RivuletArray)));
 }
 
 
