@@ -2,8 +2,6 @@
 #define RIVULET_RIVULETLISTENERREGISTRY_H
 
 #include "RivuletListener.h"
-#include "RivuletArray.h"
-#include "RivuletListenerType.h"
 
 typedef struct RivuletListenerRegistration {
   rivulet_listener_next next;
