@@ -16,16 +16,6 @@ typedef struct RivuletStream {
   RivuletProducer *_producer;
   RivuletArray *_internal_listeners;
   int _stop_id;
-  void (*rivulet_stream_add_listener) (struct RivuletStream *, RivuletListener *);
-  void (*_rivulet_stream_remove_listener) (struct RivuletStream *, RivuletListener *);
-  struct RivuletStream *(*rivulet_stream_map) (struct RivuletStream *, rivulet_stream_map_function);
-  struct RivuletStream *(*rivulet_stream_map_to) (struct RivuletStream *, int);
-  struct RivuletStream *(*rivulet_stream_filter) (struct RivuletStream *, rivulet_stream_filter_function);
-  struct RivuletStream *(*rivulet_stream_take) (struct RivuletStream *, int);
-  struct RivuletStream *(*rivulet_stream_drop) (struct RivuletStream *, int);
-  struct RivuletStream *(*rivulet_stream_last) (struct RivuletStream *);
-  struct RivuletStream *(*rivulet_stream_sample) (struct RivuletStream *, struct RivuletStream *);
-  struct RivuletStream *(*rivulet_stream_delay) (struct RivuletStream *, int);
 } RivuletStream;
 
 RivuletStream *rivulet_stream_create (RivuletProducer *producer);
@@ -35,5 +25,15 @@ RivuletStream *rivulet_stream_from_variable_length_array (RivuletArray *array);
 RivuletStream *rivulet_stream_from_array (int *array, int size);
 RivuletStream *rivulet_stream_periodic (int period);
 RivuletStream *rivulet_stream_merge (int count, ...);
+void rivulet_stream_add_listener (RivuletStream *, RivuletListener *);
+void rivulet_stream_remove_listener (RivuletStream *, RivuletListener *);
+RivuletStream *rivulet_stream_map (RivuletStream *, rivulet_stream_map_function);
+RivuletStream *rivulet_stream_map_to (RivuletStream *, int);
+RivuletStream *rivulet_stream_filter (RivuletStream *, rivulet_stream_filter_function);
+RivuletStream *rivulet_stream_take (RivuletStream *, int);
+RivuletStream *rivulet_stream_drop (RivuletStream *, int);
+RivuletStream *rivulet_stream_last (RivuletStream *);
+RivuletStream *rivulet_stream_sample (RivuletStream *, RivuletStream *);
+RivuletStream *rivulet_stream_delay (RivuletStream *, int);
 
 #endif // RIVULET_STREAM_H

@@ -51,7 +51,7 @@ static void _stop_now (RivuletStream *self) {
   self->_stop_id = STOP_ID_NONE;
 }
 
-static void _add (RivuletStream *stream, RivuletListener *listener) {
+void rivulet_stream_add_listener (RivuletStream *stream, RivuletListener *listener) {
   RivuletArray *internal_listeners = stream->_internal_listeners;
   int length = rivulet_array_push (internal_listeners, listener);
   if (length > 1) return;
@@ -70,7 +70,7 @@ static void _stop_stream (void *any) {
   _stop_now (stream);
 }
 
-static void _remove (RivuletStream *stream, RivuletListener *listener) {
+void rivulet_stream_remove_listener (RivuletStream *stream, RivuletListener *listener) {
   RivuletArray *internal_listeners = stream->_internal_listeners;
   int index = rivulet_array_index_of (internal_listeners, listener);
   if (index > -1) {
@@ -106,50 +106,40 @@ static RivuletStream *_create (RivuletProducer *producer) {
   stream->listener_type = _listener_type;
   stream->producer_type = _producer_type;
   stream->_producer = producer;
-  stream->rivulet_stream_add_listener = _add;
-  stream->_rivulet_stream_remove_listener = _remove;
   rivulet_array_initialize (&(stream->_internal_listeners));
   stream->_stop_id = STOP_ID_NONE;
-  stream->rivulet_stream_map = _map;
-  stream->rivulet_stream_map_to = _map_to;
-  stream->rivulet_stream_filter = _filter;
-  stream->rivulet_stream_take = _take;
-  stream->rivulet_stream_drop = _drop;
-  stream->rivulet_stream_last = _last;
-  stream->rivulet_stream_delay = _delay;
-  stream->rivulet_stream_sample = _sample;
   return stream;
 }
 
-static RivuletStream *_map (RivuletStream *self, rivulet_map_function map) {
+RivuletStream *rivulet_stream_map (RivuletStream *self, rivulet_stream_map_function map) {
   return _create (rivulet_map_create (self, map));
 }
 
-static RivuletStream *_map_to (RivuletStream *self, int value) {
+RivuletStream *rivulet_stream_map_to (RivuletStream *self, int value) {
   return _create (rivulet_map_to_create (self, value));
 }
 
-static RivuletStream *_filter (RivuletStream *self, rivulet_filter_function filter) {
+RivuletStream *rivulet_stream_filter (RivuletStream *self, rivulet_stream_filter_function filter) {
   return _create (rivulet_filter_create (self, filter));
 }
 
-static RivuletStream *_take (RivuletStream *self, int count) {
+RivuletStream *rivulet_stream_take (RivuletStream *self, int count) {
   return _create (rivulet_take_create (self, count));
 }
 
-static RivuletStream *_drop (RivuletStream *self, int count) {
+RivuletStream *rivulet_stream_drop (RivuletStream *self, int count) {
   return _create (rivulet_drop_create (self, count));
 }
 
-static RivuletStream *_last (RivuletStream *self) {
+RivuletStream *rivulet_stream_last (RivuletStream *self) {
   return _create (rivulet_last_create (self));
 }
 
-static RivuletStream *_delay (RivuletStream *self, int delay) {
+RivuletStream *rivulet_stream_delay (RivuletStream *self, int delay) {
   return _create (byte_delay_create (self, delay));
 }
 
-static RivuletStream *_sample (RivuletStream *self, RivuletStream *to_sample) {
+RivuletStream *rivulet_stream_sample (RivuletStream *self, RivuletStream *to_sample) {
   return _create (rivulet_sample_create (self, to_sample));
 }
 

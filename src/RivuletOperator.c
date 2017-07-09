@@ -4,13 +4,13 @@
 void rivulet_operator_in_add (void *operator) {
   RivuletOperator *self = operator;
   RivuletListener *listener = operator;
-  self->in->rivulet_stream_add_listener (self->in, listener);
+  rivulet_stream_add_listener (self->in, listener);
 }
 
 void rivulet_operator_in_remove (void *operator) {
   RivuletOperator *self = operator;
   RivuletListener *listener = operator;
-  self->in->_rivulet_stream_remove_listener (self->in, listener);
+  rivulet_stream_remove_listener (self->in, listener);
 }
 
 void rivulet_operator_out_next (void *operator, int value) {

@@ -50,7 +50,7 @@ void test_from_varray () {
   rivulet_array_push (one_to_four, &c);
   rivulet_array_push (one_to_four, &d);
   RivuletStream *stream = rivulet_stream_from_variable_length_array (one_to_four);
-  stream->rivulet_stream_add_listener (stream, listener);
+  rivulet_stream_add_listener (stream, listener);
   int length = rivulet_array_length (array);
   for (int i = 0; i < length; i++) {
     int value = (int) rivulet_array_get (array, i);
@@ -66,7 +66,7 @@ void test_from_array () {
   printf ("TEST RivuletStream.fromArray()\n");
   int five_to_eight[4] = {5, 6, 7, 8};
   RivuletStream *stream = rivulet_stream_from_array (five_to_eight, 4);
-  stream->rivulet_stream_add_listener (stream, listener);
+  rivulet_stream_add_listener (stream, listener);
   int length = rivulet_array_length (array);
   for (int i = 0; i < length; i++) {
     int value = (int) rivulet_array_get (array, i);
@@ -82,8 +82,8 @@ void test_map () {
   printf ("TEST RivuletStream.map()\n");
   int five_to_eight[4] = {5, 6, 7, 8};
   RivuletStream *stream = rivulet_stream_from_array (five_to_eight, 4);
-  RivuletStream *stream_map = stream->rivulet_stream_map (stream, add_one);
-  stream_map->rivulet_stream_add_listener (stream_map, listener);
+  RivuletStream *stream_map = rivulet_stream_map (stream, add_one);
+  rivulet_stream_add_listener (stream_map, listener);
   int length = rivulet_array_length (array);
   for (int i = 0; i < length; i++) {
     int value = (int) rivulet_array_get (array, i);
@@ -99,8 +99,8 @@ void test_map_to () {
   printf ("TEST RivuletStream.mapTo()\n");
   int five_to_eight[4] = {5, 6, 7, 8};
   RivuletStream *stream = rivulet_stream_from_array (five_to_eight, 4);
-  RivuletStream *stream_map_to = stream->rivulet_stream_map_to (stream, 10);
-  stream_map_to->rivulet_stream_add_listener (stream_map_to, listener);
+  RivuletStream *stream_map_to = rivulet_stream_map_to (stream, 10);
+  rivulet_stream_add_listener (stream_map_to, listener);
   int length = rivulet_array_length (array);
   for (int i = 0; i < length; i++) {
     int value = (int) rivulet_array_get (array, i);
@@ -120,8 +120,8 @@ void test_filter () {
   printf ("TEST RivuletStream.filter()\n");
   int five_to_eight[4] = {5, 6, 7, 8};
   RivuletStream *stream = rivulet_stream_from_array (five_to_eight, 4);
-  RivuletStream *stream_filter = stream->rivulet_stream_filter (stream, greater_than_6);
-  stream_filter->rivulet_stream_add_listener (stream_filter, listener);
+  RivuletStream *stream_filter = rivulet_stream_filter (stream, greater_than_6);
+  rivulet_stream_add_listener (stream_filter, listener);
   int length = rivulet_array_length (array);
   for (int i = 0; i < length; i++) {
     int value = (int) rivulet_array_get (array, i);
@@ -137,8 +137,8 @@ void test_take () {
   printf ("TEST RivuletStream.take()\n");
   int one_to_four[4] = {1, 2, 3, 4};
   RivuletStream *stream = rivulet_stream_from_array (one_to_four, 4);
-  RivuletStream *stream_take = stream->rivulet_stream_take (stream, 3);
-  stream_take->rivulet_stream_add_listener (stream_take, listener);
+  RivuletStream *stream_take = rivulet_stream_take (stream, 3);
+  rivulet_stream_add_listener (stream_take, listener);
   int length = rivulet_array_length (array);
   if (length != 3) {
     printf ("FAILED\n");
@@ -159,8 +159,8 @@ void test_drop () {
   int one_to_four[4] = {1, 2, 3, 4};
   int to_drop = 3;
   RivuletStream *stream = rivulet_stream_from_array (one_to_four, 4);
-  RivuletStream *stream_drop = stream->rivulet_stream_drop (stream, to_drop);
-  stream_drop->rivulet_stream_add_listener (stream_drop, listener);
+  RivuletStream *stream_drop = rivulet_stream_drop (stream, to_drop);
+  rivulet_stream_add_listener (stream_drop, listener);
   int length = rivulet_array_length (array);
   if (length != 1) {
     printf ("FAILED\n");
@@ -180,8 +180,8 @@ void test_last () {
   printf ("TEST RivuletStream.last()\n");
   int one_to_four[4] = {1, 2, 3, 4};
   RivuletStream *stream = rivulet_stream_from_array (one_to_four, 4);
-  RivuletStream *stream_last = stream->rivulet_stream_last (stream);
-  stream_last->rivulet_stream_add_listener (stream_last, listener);
+  RivuletStream *stream_last = rivulet_stream_last (stream);
+  rivulet_stream_add_listener (stream_last, listener);
   int length = rivulet_array_length (array);
   if (length != 1) {
     printf ("FAILED\n");
@@ -196,8 +196,8 @@ void test_last () {
   free (stream);
   stream = rivulet_stream_empty ();
   free (stream_last);
-  stream_last = stream->rivulet_stream_last (stream);
-  stream_last->rivulet_stream_add_listener (stream_last, listener);
+  stream_last = rivulet_stream_last (stream);
+  rivulet_stream_add_listener (stream_last, listener);
   length = rivulet_array_length (array);
   if (length != 0) {
     printf ("FAILED\n");
@@ -210,7 +210,7 @@ void test_periodic () {
   reset ();
   printf ("TEST RivuletStream.periodic()\n");
   RivuletStream *stream_periodic = rivulet_stream_periodic (2);
-  stream_periodic->rivulet_stream_add_listener (stream_periodic, listener);
+  rivulet_stream_add_listener (stream_periodic, listener);
   int length = rivulet_array_length (array);
   if (length != 0) {
     printf ("FAILED\n");
@@ -242,8 +242,8 @@ void test_delay () {
   reset ();
   printf ("TEST RivuletStream.delay()\n");
   RivuletStream *stream_periodic = rivulet_stream_periodic (1);
-  RivuletStream *stream_delay = stream_periodic->rivulet_stream_delay (stream_periodic, 1);
-  stream_delay->rivulet_stream_add_listener (stream_delay, listener);
+  RivuletStream *stream_delay = rivulet_stream_delay (stream_periodic, 1);
+  rivulet_stream_add_listener (stream_delay, listener);
   int length = rivulet_array_length (array);
   if (length != 0) {
     printf ("FAILED\n");
@@ -280,12 +280,10 @@ void test_sample () {
   reset ();
   printf ("TEST RivuletStream.sample()\n");
   RivuletStream *stream_periodic_every_tick = rivulet_stream_periodic (1);
-  RivuletStream *stream_periodic_map = stream_periodic_every_tick->rivulet_stream_map (stream_periodic_every_tick,
-                                                                                       sample_map);
+  RivuletStream *stream_periodic_map = rivulet_stream_map (stream_periodic_every_tick, sample_map);
   RivuletStream *stream_periodic_every_fifty_ticks = rivulet_stream_periodic (50);
-  RivuletStream *stream_periodic_map_sampled = stream_periodic_every_fifty_ticks->rivulet_stream_sample (
-          stream_periodic_every_fifty_ticks, stream_periodic_map);
-  stream_periodic_map_sampled->rivulet_stream_add_listener (stream_periodic_map_sampled, listener);
+  RivuletStream *stream_periodic_map_sampled = rivulet_stream_sample (stream_periodic_every_fifty_ticks, stream_periodic_map);
+  rivulet_stream_add_listener (stream_periodic_map_sampled, listener);
   for (int i = 0; i < 49; i++) {
     rivulet_timer->tick ();
   }
@@ -325,7 +323,7 @@ void test_empty () {
   reset ();
   printf ("TEST RivuletStream.empty()\n");
   RivuletStream *stream = rivulet_stream_empty ();
-  stream->rivulet_stream_add_listener (stream, listener);
+  rivulet_stream_add_listener (stream, listener);
   int length = rivulet_array_length (array);
   if (length != 0) {
     printf ("FAILED\n");
@@ -338,7 +336,7 @@ void test_never () {
   reset ();
   printf ("TEST RivuletStream.never()\n");
   RivuletStream *stream = rivulet_stream_never ();
-  stream->rivulet_stream_add_listener (stream, listener);
+  rivulet_stream_add_listener (stream, listener);
   int length = rivulet_array_length (array);
   if (length != 0) {
     printf ("FAILED\n");

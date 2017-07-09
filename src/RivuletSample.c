@@ -48,13 +48,13 @@ static void _start (RivuletProducer *self, RivuletListener *out) {
   RivuletSample *operator = (RivuletSample *) self;
   operator->out = (RivuletStream *) out;
   operator->_has = FALSE;
-  operator->_to_sample->rivulet_stream_add_listener (operator->_to_sample, operator->_listener);
+  rivulet_stream_add_listener (operator->_to_sample, operator->_listener);
   rivulet_operator_in_add (operator);
 }
 
 static void _stop (RivuletProducer *self) {
   RivuletSample *operator = (RivuletSample *) self;
-  operator->_to_sample->_rivulet_stream_remove_listener (operator->_to_sample, operator->_listener);
+  rivulet_stream_remove_listener (operator->_to_sample, operator->_listener);
   rivulet_operator_in_remove (operator);
   operator->out = NULL;
 }
