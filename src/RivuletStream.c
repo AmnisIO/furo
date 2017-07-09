@@ -8,46 +8,50 @@
 #include "RivuletLast.h"
 #include "RivuletDelay.h"
 #include "RivuletSample.h"
+#include "RivuletListenerRegistry.h"
+#include "RivuletProducerRegistry.h"
 
 int STOP_ID_NONE = 0;
 
 int ERROR_NONE = 0;
 
-static void _next (RivuletListenerInternal *self, int value) {
+static void _next (RivuletListener *self, int value) {
   RivuletStream *stream = (RivuletStream *) self;
   RivuletArray *internal_listeners = stream->_internal_listeners;
   int length = rivulet_array_length (internal_listeners);
   if (length == 0) return;
   for (int i = 0; i < length; i++) {
-    RivuletListenerInternal *listener = rivulet_array_get (internal_listeners, i);
-    rivulet_listener_internal_next_get (listener) (listener, value);
+    RivuletListener *listener = rivulet_array_get (internal_listeners, i);
+    rivulet_listener_registry_get_next (listener->listener_type) (listener, value);
   }
 }
 
 static void _teardown (RivuletStream *self) {
   if (rivulet_array_length (self->_internal_listeners) == 0) return;
-  if (self->_producer != NULL) self->_producer->_stop (self->_producer);
+  RivuletProducer *producer = self->_producer;
+  if (producer != NULL) rivulet_producer_registry_get_stop (producer->producer_type) (self->_producer);
   rivulet_array_clear (self->_internal_listeners);
 }
 
-static void _complete (RivuletListenerInternal *self) {
+static void _complete (RivuletListener *self) {
   RivuletStream *stream = (RivuletStream *) self;
   RivuletArray *internal_listeners = stream->_internal_listeners;
   int length = rivulet_array_length (internal_listeners);
   if (length == 0) return;
   for (int i = 0; i < length; i++) {
-    RivuletListenerInternal *listener = rivulet_array_get (internal_listeners, i);
-    rivulet_listener_internal_complete_get (listener) (listener);
+    RivuletListener *listener = rivulet_array_get (internal_listeners, i);
+    rivulet_listener_registry_get_complete (listener->listener_type) (listener);
   }
   _teardown (stream);
 }
 
 static void _stop_now (RivuletStream *self) {
-  if (self->_producer != NULL) self->_producer->_stop (self->_producer);
+  RivuletProducer *producer = self->_producer;
+  if (producer != NULL) rivulet_producer_registry_get_stop (producer->producer_type) (self->_producer);
   self->_stop_id = STOP_ID_NONE;
 }
 
-static void _add (RivuletStream *stream, RivuletListenerInternal *listener) {
+static void _add (RivuletStream *stream, RivuletListener *listener) {
   RivuletArray *internal_listeners = stream->_internal_listeners;
   int length = rivulet_array_push (internal_listeners, listener);
   if (length > 1) return;
@@ -55,8 +59,9 @@ static void _add (RivuletStream *stream, RivuletListenerInternal *listener) {
     rivulet_timer->clear_task (stream->_stop_id);
     stream->_stop_id = STOP_ID_NONE;
   } else {
-    RivuletProducerInternal *producer = stream->_producer;
-    if (producer != NULL) producer->_start (producer, (RivuletListenerInternal *) stream);
+    RivuletProducer *producer = stream->_producer;
+    if (producer != NULL)
+      rivulet_producer_registry_get_start (producer->producer_type) (producer, (RivuletListener *) stream);
   }
 }
 
@@ -65,7 +70,7 @@ static void _stop_stream (void *any) {
   _stop_now (stream);
 }
 
-static void _remove (RivuletStream *stream, RivuletListenerInternal *listener) {
+static void _remove (RivuletStream *stream, RivuletListener *listener) {
   RivuletArray *internal_listeners = stream->_internal_listeners;
   int index = rivulet_array_index_of (internal_listeners, listener);
   if (index > -1) {
@@ -77,11 +82,11 @@ static void _remove (RivuletStream *stream, RivuletListenerInternal *listener) {
 }
 
 static void _add_listener (RivuletStream *stream, RivuletListener *listener) {
-  stream->_add (stream, (RivuletListenerInternal *) listener);
+  stream->_add (stream, (RivuletListener *) listener);
 }
 
 static void _remove_listener (RivuletStream *stream, RivuletListener *listener) {
-  stream->_remove (stream, (RivuletListenerInternal *) listener);
+  stream->_remove (stream, (RivuletListener *) listener);
 }
 
 static RivuletStream *_map (RivuletStream *self, rivulet_map_function map);
@@ -93,12 +98,22 @@ static RivuletStream *_last (RivuletStream *self);
 static RivuletStream *_delay (RivuletStream *self, int delay);
 static RivuletStream *_sample (RivuletStream *self, RivuletStream *to_sample);
 
-static RivuletStream *_create (RivuletProducerInternal *producer) {
+static Boolean _registered = 0;
+static RivuletListenerType _listener_type = 0;
+static RivuletProducerType _producer_type = 0;
+
+static void _register () {
+  if (_registered) return;
+  _listener_type = rivulet_listener_registry_register (_next, _complete);
+  _registered = 1;
+}
+
+static RivuletStream *_create (RivuletProducer *producer) {
   RivuletStream *stream = xmalloc (sizeof (RivuletStream));
-  stream->type = RIVULET_OBSERVABLE_TYPE_STREAM;
+  _register ();
+  stream->listener_type = _listener_type;
+  stream->producer_type = _producer_type;
   stream->_producer = producer;
-  stream->_next = _next;
-  stream->_complete = _complete;
   stream->_add = _add;
   stream->_remove = _remove;
   rivulet_array_initialize (&(stream->_internal_listeners));
@@ -117,42 +132,42 @@ static RivuletStream *_create (RivuletProducerInternal *producer) {
 }
 
 static RivuletStream *_map (RivuletStream *self, rivulet_map_function map) {
-  return _create ((RivuletProducerInternal *) rivulet_map_create (self, map));
+  return _create ((RivuletProducer *) rivulet_map_create (self, map));
 }
 
 static RivuletStream *_map_to (RivuletStream *self, int value) {
-  return _create ((RivuletProducerInternal *) rivulet_map_to_create (self, value));
+  return _create ((RivuletProducer *) rivulet_map_to_create (self, value));
 }
 
 static RivuletStream *_filter (RivuletStream *self, rivulet_filter_function filter) {
-  return _create ((RivuletProducerInternal *) rivulet_filter_create (self, filter));
+  return _create ((RivuletProducer *) rivulet_filter_create (self, filter));
 }
 
 static RivuletStream *_take (RivuletStream *self, int count) {
-  return _create ((RivuletProducerInternal *) rivulet_take_create (self, count));
+  return _create ((RivuletProducer *) rivulet_take_create (self, count));
 }
 
 static RivuletStream *_drop (RivuletStream *self, int count) {
-  return _create ((RivuletProducerInternal *) rivulet_drop_create (self, count));
+  return _create ((RivuletProducer *) rivulet_drop_create (self, count));
 }
 
 static RivuletStream *_last (RivuletStream *self) {
-  return _create ((RivuletProducerInternal *) rivulet_last_create (self));
+  return _create ((RivuletProducer *) rivulet_last_create (self));
 }
 
 static RivuletStream *_delay (RivuletStream *self, int delay) {
-  return _create ((RivuletProducerInternal *) byte_delay_create (self, delay));
+  return _create ((RivuletProducer *) byte_delay_create (self, delay));
 }
 
 static RivuletStream *_sample (RivuletStream *self, RivuletStream *to_sample) {
-  return _create ((RivuletProducerInternal *) rivulet_sample_create (self, to_sample));
+  return _create ((RivuletProducer *) rivulet_sample_create (self, to_sample));
 }
 
 RivuletStream *rivulet_stream_create (RivuletProducer *producer) {
-  return _create ((RivuletProducerInternal *) producer);
+  return _create ((RivuletProducer *) producer);
 }
 
-static void _never_start (struct RivuletProducer *self, struct RivuletListenerInternal *listener) {
+static void _never_start (struct RivuletProducer *self, struct RivuletListener *listener) {
 
 }
 
@@ -160,17 +175,17 @@ static void _never_stop (struct RivuletProducer *self) {
 
 }
 
-static void _complete_immediately (struct RivuletProducer *self, struct RivuletListenerInternal *listener) {
-  listener->_complete (listener);
+static void _complete_immediately (struct RivuletProducer *self, struct RivuletListener *listener) {
+  rivulet_listener_registry_get_complete (listener->listener_type) (listener);
 }
 
-RivuletStream *rivulet_stream_never () {
-  return rivulet_stream_create (rivulet_producer_create (_never_start, _never_stop));
-}
-
-RivuletStream *rivulet_stream_empty () {
-  return rivulet_stream_create (rivulet_producer_create (_complete_immediately, _never_stop));
-}
+//RivuletStream *rivulet_stream_never () {
+//  return rivulet_stream_create (rivulet_producer_never (_never_start, _never_stop));
+//}
+//
+//RivuletStream *rivulet_stream_empty () {
+//  return rivulet_stream_create (rivulet_producer_empty (_complete_immediately, _never_stop));
+//}
 
 RivuletStream *rivulet_stream_from_variable_length_array (RivuletArray *array) {
   return rivulet_stream_create (rivulet_producer_from_variable_length_array (array));
