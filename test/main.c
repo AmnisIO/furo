@@ -348,10 +348,10 @@ void test_never () {
 }
 
 typedef struct NewVariableLengthArray {
-    void **memory;
-    Size allocated;
-    Size used;
-    int index;
+  void **memory;
+  Size allocated;
+  Size used;
+  int index;
 } NewVariableLengthArray;
 
 typedef struct NewRivuletStream {
@@ -367,13 +367,19 @@ void test_memory () {
   printf ("size of void *: %d bytes\n", (int) sizeof (void *));
   printf ("size of RivuletArray: %d bytes\n", (int) sizeof (RivuletArray));
   printf ("size of RivuletProducer: %d bytes\n", (int) sizeof (RivuletProducer));
+  printf ("size of RivuletProducer with registration: %d bytes\n",
+          (int) (sizeof (RivuletProducer) + sizeof (rivulet_producer_start) + sizeof (rivulet_producer_stop) + sizeof (void *)));
   printf ("size of RivuletListener: %d bytes\n", (int) sizeof (RivuletListener));
+  printf ("size of RivuletListener with registration: %d bytes\n",
+          (int) (sizeof (RivuletListener) + sizeof (rivulet_listener_next) + sizeof (rivulet_listener_complete) + sizeof (void *)));
   printf ("size of RivuletStream: %d bytes\n", (int) sizeof (RivuletStream));
   printf ("size of RivuletOperator: %d bytes\n", (int) sizeof (RivuletOperator));
   printf ("size of NewRivuletStream: %d bytes\n", (int) sizeof (NewRivuletStream));
   printf ("size of NewVariableLengthArray: %d bytes\n", (int) sizeof (NewVariableLengthArray));
-  printf ("space required to create ByteStream.periodic(): %d bytes\n", (int) (sizeof(RivuletProducerPeriodic) + sizeof(RivuletStream) + sizeof (RivuletArray)));
-  printf ("space required to create new ByteStream.periodic(): %d bytes\n", (int) (sizeof(RivuletProducerPeriodic) + sizeof(NewRivuletStream) + sizeof (NewVariableLengthArray)));
+  printf ("space required to create ByteStream.periodic(): %d bytes\n",
+          (int) (sizeof (RivuletProducerPeriodic) + sizeof (RivuletStream) + sizeof (RivuletArray)));
+  printf ("space required to create new ByteStream.periodic(): %d bytes\n",
+          (int) (sizeof (RivuletProducerPeriodic) + sizeof (NewRivuletStream) + sizeof (NewVariableLengthArray)));
 }
 
 
