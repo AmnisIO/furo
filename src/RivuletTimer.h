@@ -1,13 +1,13 @@
 #ifndef RIVULET_TIMER_H
 #define RIVULET_TIMER_H
 
-#include "VariableLengthArray.h"
+#include "RivuletArray.h"
 #include "RivuletTask.h"
 
 typedef Milliseconds (*rivulet_timer_get_milliseconds) ();
 
 typedef struct RivuletTimer {
-  VariableLengthArray *_tasks;
+  RivuletArray *_tasks;
   rivulet_timer_get_milliseconds get_milliseconds;
   RivuletTaskIdentifier (*set_timeout) (rivulet_task task, void *argument, int delay);
   RivuletTaskIdentifier (*set_interval) (rivulet_task task, void *argument, int period);
