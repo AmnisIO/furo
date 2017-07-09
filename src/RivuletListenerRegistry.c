@@ -12,7 +12,8 @@ void rivulet_listener_registry_initialize () {
   rivulet_array_initialize (&(registry->registrations));
 }
 
-RivuletListenerType rivulet_listener_registry_push (RivuletListenerRegistration *registration) {
+RivuletListenerType rivulet_listener_registry_register (RivuletListenerRegistration *registration) {
+  if(registry == NULL) rivulet_listener_registry_initialize ();
   return (RivuletListenerType) rivulet_array_push (registry->registrations, registration);
 }
 

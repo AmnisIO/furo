@@ -10,8 +10,7 @@ typedef struct RivuletListenerRegistration {
   rivulet_listener_complete complete;
 } RivuletListenerRegistration;
 
-void rivulet_listener_registry_initialize ();
-RivuletListenerType rivulet_listener_registry_push (RivuletListenerRegistration *);
+RivuletListenerType rivulet_listener_registry_register (RivuletListenerRegistration *);
 rivulet_listener_next rivulet_listener_registry_get_next (RivuletListenerType);
 rivulet_listener_complete rivulet_listener_registry_get_complete (RivuletListenerType);
 
