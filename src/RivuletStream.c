@@ -10,6 +10,8 @@
 #include "RivuletSample.h"
 #include "RivuletListenerRegistry.h"
 #include "RivuletProducerRegistry.h"
+#include "RivuletProducerNever.h"
+#include "RivuletProducerEmpty.h"
 
 int STOP_ID_NONE = 0;
 
@@ -167,25 +169,13 @@ RivuletStream *rivulet_stream_create (RivuletProducer *producer) {
   return _create (producer);
 }
 
-static void _never_start (struct RivuletProducer *self, struct RivuletListener *listener) {
-
+RivuletStream *rivulet_stream_never () {
+  return rivulet_stream_create (rivulet_producer_never_create ());
 }
 
-static void _never_stop (struct RivuletProducer *self) {
-
+RivuletStream *rivulet_stream_empty () {
+  return rivulet_stream_create (rivulet_producer_empty_create ());
 }
-
-static void _complete_immediately (struct RivuletProducer *self, struct RivuletListener *listener) {
-  rivulet_listener_registry_get_complete (listener->listener_type) (listener);
-}
-
-//RivuletStream *rivulet_stream_never () {
-//  return rivulet_stream_create (rivulet_producer_never (_never_start, _never_stop));
-//}
-//
-//RivuletStream *rivulet_stream_empty () {
-//  return rivulet_stream_create (rivulet_producer_empty (_complete_immediately, _never_stop));
-//}
 
 RivuletStream *rivulet_stream_from_variable_length_array (RivuletArray *array) {
   return rivulet_stream_create (rivulet_producer_from_variable_length_array (array));
