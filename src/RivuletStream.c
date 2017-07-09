@@ -136,35 +136,35 @@ static RivuletStream *_map (RivuletStream *self, rivulet_map_function map) {
 }
 
 static RivuletStream *_map_to (RivuletStream *self, int value) {
-  return _create ((RivuletProducer *) rivulet_map_to_create (self, value));
+  return _create (rivulet_map_to_create (self, value));
 }
 
 static RivuletStream *_filter (RivuletStream *self, rivulet_filter_function filter) {
-  return _create ((RivuletProducer *) rivulet_filter_create (self, filter));
+  return _create (rivulet_filter_create (self, filter));
 }
 
 static RivuletStream *_take (RivuletStream *self, int count) {
-  return _create ((RivuletProducer *) rivulet_take_create (self, count));
+  return _create (rivulet_take_create (self, count));
 }
 
 static RivuletStream *_drop (RivuletStream *self, int count) {
-  return _create ((RivuletProducer *) rivulet_drop_create (self, count));
+  return _create (rivulet_drop_create (self, count));
 }
 
 static RivuletStream *_last (RivuletStream *self) {
-  return _create ((RivuletProducer *) rivulet_last_create (self));
+  return _create (rivulet_last_create (self));
 }
 
 static RivuletStream *_delay (RivuletStream *self, int delay) {
-  return _create ((RivuletProducer *) byte_delay_create (self, delay));
+  return _create (byte_delay_create (self, delay));
 }
 
 static RivuletStream *_sample (RivuletStream *self, RivuletStream *to_sample) {
-  return _create ((RivuletProducer *) rivulet_sample_create (self, to_sample));
+  return _create (rivulet_sample_create (self, to_sample));
 }
 
 RivuletStream *rivulet_stream_create (RivuletProducer *producer) {
-  return _create ((RivuletProducer *) producer);
+  return _create (producer);
 }
 
 static void _never_start (struct RivuletProducer *self, struct RivuletListener *listener) {
