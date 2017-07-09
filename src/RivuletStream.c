@@ -81,15 +81,6 @@ void rivulet_stream_remove_listener (RivuletStream *stream, RivuletListener *lis
   }
 }
 
-static RivuletStream *_map (RivuletStream *self, rivulet_map_function map);
-static RivuletStream *_map_to (RivuletStream *self, int value);
-static RivuletStream *_filter (RivuletStream *self, rivulet_stream_filter_function filter);
-static RivuletStream *_take (RivuletStream *self, int count);
-static RivuletStream *_drop (RivuletStream *self, int count);
-static RivuletStream *_last (RivuletStream *self);
-static RivuletStream *_delay (RivuletStream *self, int delay);
-static RivuletStream *_sample (RivuletStream *self, RivuletStream *to_sample);
-
 static Boolean _registered = 0;
 static RivuletListenerType _listener_type = 0;
 static RivuletProducerType _producer_type = 0;
