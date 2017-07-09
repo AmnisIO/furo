@@ -10,7 +10,4 @@ typedef struct RivuletOperator {
   RivuletStream *out;
 } RivuletOperator;
 
-RivuletOperator *byte_byte_operator_create ();
-void byte_byte_operator_initialize (RivuletOperator *operator);
-
 #endif //RIVULET_OPERATOR_H
