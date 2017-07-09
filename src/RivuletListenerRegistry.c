@@ -1,6 +1,19 @@
 #include "RivuletListenerRegistry.h"
 #include "RivuletArray.h"
 
+typedef struct RivuletListenerRegistration {
+  rivulet_listener_next next;
+  rivulet_listener_complete complete;
+} RivuletListenerRegistration;
+
+static RivuletListenerRegistration *
+_create_registration (rivulet_listener_next next, rivulet_listener_complete complete) {
+  RivuletListenerRegistration *registration = xmalloc (sizeof (RivuletListenerRegistration));
+  registration->next = next;
+  registration->complete = complete;
+  return registration;
+}
+
 typedef struct RivuletListenerRegistry {
   RivuletArray *registrations;
 } RivuletListenerRegistry;
@@ -13,9 +26,11 @@ void rivulet_listener_registry_initialize () {
   rivulet_array_initialize (&(registry->registrations));
 }
 
-RivuletListenerType rivulet_listener_registry_register (RivuletListenerRegistration *registration) {
+RivuletListenerType
+rivulet_listener_registry_register (rivulet_listener_next next, rivulet_listener_complete complete) {
   if (registry == NULL) rivulet_listener_registry_initialize ();
-  return (RivuletListenerType) rivulet_array_push (registry->registrations, registration);
+  return (RivuletListenerType) rivulet_array_push (registry->registrations,
+                                                   _create_registration (next, complete));
 }
 
 RivuletListenerRegistration *rivulet_listener_registry_get (RivuletListenerType type) {
