@@ -24,7 +24,7 @@ void _complete (RivuletListener *self) {
 }
 
 void initialize_tests () {
-  array = variable_length_array_create ();
+  array = rivulet_array_create ();
   listener = rivulet_listener_create (_next, _complete);
   rivulet_timer_initialize (get_milliseconds);
 }
@@ -42,7 +42,7 @@ int add_one (int value) {
 void test_from_varray () {
   reset ();
   printf ("TEST RivuletStream.fromVariableLengthArray()\n");
-  RivuletArray *one_to_four = variable_length_array_create ();
+  RivuletArray *one_to_four = rivulet_array_create ();
   int a = 1, b = 2, c = 3, d = 4;
   rivulet_array_push (one_to_four, &a);
   rivulet_array_push (one_to_four, &b);

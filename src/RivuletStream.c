@@ -101,7 +101,7 @@ static RivuletStream *_create (RivuletProducerInternal *producer) {
   stream->_complete = _complete;
   stream->_add = _add;
   stream->_remove = _remove;
-  variable_length_array_initialize (&(stream->_internal_listeners));
+  rivulet_array_initialize (&(stream->_internal_listeners));
   stream->_stop_id = STOP_ID_NONE;
   stream->add_listener = _add_listener;
   stream->remove_listener = _remove_listener;

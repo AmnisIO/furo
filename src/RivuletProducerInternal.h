@@ -1,7 +1,7 @@
 #ifndef RIVULET_PRODUCERINTERNAL_H
 #define RIVULET_PRODUCERINTERNAL_H
 
-#include "RivuletListenerInternal.h"
+#include "RivuletListener.h"
 #include "RivuletObservable.h"
 
 typedef struct RivuletProducerInternal {

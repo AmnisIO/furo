@@ -11,8 +11,8 @@ typedef struct RivuletArray {
   int index;
 } RivuletArray;
 
-void variable_length_array_initialize (RivuletArray **);
-RivuletArray *variable_length_array_create ();
+void rivulet_array_initialize (RivuletArray **);
+RivuletArray *rivulet_array_create ();
 int rivulet_array_length (RivuletArray *);
 int rivulet_array_push (RivuletArray *, void *);
 void rivulet_array_clear (RivuletArray *);

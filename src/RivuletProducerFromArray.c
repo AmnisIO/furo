@@ -25,7 +25,7 @@ RivuletProducer *rivulet_producer_from_variable_length_array (RivuletArray *arra
 
 RivuletProducer *rivulet_producer_from_array (int *array, int size) {
   RivuletProducerFromArray *producer = xmalloc (sizeof (RivuletProducerFromArray));
-  variable_length_array_initialize (&(producer->array));
+  rivulet_array_initialize (&(producer->array));
   RivuletArray *varray = producer->array;
   for (int i = 0; i < size; i++) {
     rivulet_array_push (varray, array + i);
