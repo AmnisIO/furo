@@ -19,12 +19,12 @@ static void _next (RivuletListener *self, int value) {
   RivuletDrop *operator = (RivuletDrop *) self;
   if (operator->out == NULL) return;
   if (operator->_dropped++ < operator->_to_drop) return;
-  rivulet_operator_out_next (operator, value);;
+  rivulet_operator_out_next (operator, value);
 }
 
 static void _complete (RivuletListener *self) {
   RivuletDrop *operator = (RivuletDrop *) self;
-  rivulet_operator_out_complete (operator);;
+  rivulet_operator_out_complete (operator);
 }
 
 static Boolean _registered = 0;

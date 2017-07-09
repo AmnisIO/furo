@@ -49,7 +49,7 @@ static void _send_complete (void *self) {
   DelayedComplete *delayed_complete = self;
   RivuletDelay *operator = delayed_complete->operator;
   if (operator->out == NULL) return;
-  rivulet_operator_out_complete (operator);;
+  rivulet_operator_out_complete (operator);
 }
 
 static void _next (RivuletListener *self, int value) {

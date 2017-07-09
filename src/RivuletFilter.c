@@ -19,12 +19,12 @@ static void _next (RivuletListener *self, int value) {
   RivuletFilter *operator = (RivuletFilter *) self;
   Boolean passes = operator->filter (value);
   if (!passes) return;
-  rivulet_operator_out_next (operator, value);;
+  rivulet_operator_out_next (operator, value);
 }
 
 static void _complete (RivuletListener *self) {
   RivuletFilter *operator = (RivuletFilter *) self;
-  rivulet_operator_out_complete (operator);;
+  rivulet_operator_out_complete (operator);
 }
 
 static Boolean _registered = 0;

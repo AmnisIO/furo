@@ -21,13 +21,13 @@ static void _next (RivuletListener *self, int value) {
   if (operator->out == NULL) return;
   int taken = ++operator->_taken;
   int to_take = operator->_to_take;
-  if (taken <= to_take) rivulet_operator_out_next (operator, value);;
-  if (taken == to_take) rivulet_operator_out_complete (operator);;
+  if (taken <= to_take) rivulet_operator_out_next (operator, value);
+  if (taken == to_take) rivulet_operator_out_complete (operator);
 }
 
 static void _complete (RivuletListener *self) {
   RivuletTake *operator = (RivuletTake *) self;
-  rivulet_operator_out_complete (operator);;
+  rivulet_operator_out_complete (operator);
 }
 
 static Boolean _registered = 0;

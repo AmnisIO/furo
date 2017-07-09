@@ -29,9 +29,9 @@ static void _complete (RivuletListener *self) {
   if (operator->out == NULL) return;
   if (operator->_has) {
     rivulet_operator_out_next (operator, operator->_value);
-    rivulet_operator_out_complete (operator);;
+    rivulet_operator_out_complete (operator);
   } else {
-    rivulet_operator_out_complete (operator);;
+    rivulet_operator_out_complete (operator);
   }
 }
 
