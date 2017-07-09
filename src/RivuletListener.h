@@ -1,21 +1,17 @@
 #ifndef RIVULET_LISTENER_H
 #define RIVULET_LISTENER_H
 
-#include "RivuletListenerInternal.h"
+#include "RivuletListenerType.h"
+#include "RivuletProducerType.h"
 
 typedef struct RivuletListener {
-  RivuletObservableType type;
-  rivulet_listener_internal_next _next;
-  rivulet_listener_internal_complete _complete;
-  void (*next) (struct RivuletListener *self, int v);
-  void (*complete) (struct RivuletListener *self);
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
 } RivuletListener;
 
-typedef void (*rivulet_listener_next) (struct RivuletListener *self, int v);
-typedef void (*rivulet_listener_complete) (struct RivuletListener *self);
+typedef void (*rivulet_listener_next) (RivuletListener *, int);
+typedef void (*rivulet_listener_complete) (RivuletListener *);
 
-RivuletListener *
-rivulet_listener_create (rivulet_listener_next next, rivulet_listener_complete complete);
-void rivulet_listener_initialize (RivuletListener *listener, rivulet_listener_next next, rivulet_listener_complete complete);
+RivuletListener *rivulet_listener_create(rivulet_listener_next, rivulet_listener_complete);
 
 #endif //RIVULET_LISTENER_H

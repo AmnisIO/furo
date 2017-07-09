@@ -51,5 +51,5 @@ void rivulet_timer_initialize (rivulet_timer_get_milliseconds get_milliseconds) 
   rivulet_timer->set_interval = _set_interval;
   rivulet_timer->clear_task = _clear_task;
   rivulet_timer->tick = _tick;
-  variable_length_array_initialize (&(rivulet_timer->_tasks));
+  rivulet_array_initialize (&(rivulet_timer->_tasks));
 }

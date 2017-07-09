@@ -4,20 +4,16 @@
 #include "RivuletOperator.h"
 
 typedef struct RivuletSample {
-  RivuletObservableType type;
-  rivulet_producer_internal_start _start;
-  rivulet_producer_internal_stop _stop;
-  rivulet_listener_internal_next _next;
-  rivulet_listener_internal_complete _complete;
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
   RivuletStream *in;
   RivuletStream *out;
-  OperatorType operation;
   RivuletStream *_to_sample;
-  RivuletListenerInternal *_listener;
+  RivuletListener *_listener;
   Boolean _has;
   int _value;
 } RivuletSample;
 
-RivuletSample *rivulet_sample_create (RivuletStream *in, RivuletStream *to_sample);
+RivuletProducer *rivulet_sample_create (RivuletStream *in, RivuletStream *to_sample);
 
 #endif //RIVULET_SAMPLE_H

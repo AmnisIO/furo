@@ -1,0 +1,10 @@
+#ifndef RIVULET_RIVULETLISTENERREGISTRY_H
+#define RIVULET_RIVULETLISTENERREGISTRY_H
+
+#include "RivuletListener.h"
+
+RivuletListenerType rivulet_listener_registry_register (rivulet_listener_next, rivulet_listener_complete);
+rivulet_listener_next rivulet_listener_registry_get_next (RivuletListenerType);
+rivulet_listener_complete rivulet_listener_registry_get_complete (RivuletListenerType);
+
+#endif //RIVULET_RIVULETLISTENERREGISTRY_H

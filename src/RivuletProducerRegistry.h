@@ -1,0 +1,10 @@
+#ifndef RIVULET_RIVULETPRODUCERREGISTRY_H
+#define RIVULET_RIVULETPRODUCERREGISTRY_H
+
+#include "RivuletProducer.h"
+
+RivuletProducerType rivulet_producer_registry_register (rivulet_producer_start, rivulet_producer_stop);
+rivulet_producer_start rivulet_producer_registry_get_start (RivuletProducerType);
+rivulet_producer_stop rivulet_producer_registry_get_stop (RivuletProducerType);
+
+#endif //RIVULET_RIVULETPRODUCERREGISTRY_H

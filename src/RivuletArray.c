@@ -5,12 +5,12 @@ int rivulet_array_length (RivuletArray *array) {
 }
 
 int rivulet_array_push (RivuletArray *array, void *data) {
-  size_t toallocate;
+  size_t to_allocate;
   size_t size = sizeof (void *);
   if ((array->allocated - array->used) < size) {
-    toallocate = array->allocated == 0 ? size : (array->allocated * 2);
-    array->memory = realloc (array->memory, toallocate);
-    array->allocated = toallocate;
+    to_allocate = array->allocated == 0 ? size : (array->allocated * 2);
+    array->memory = realloc (array->memory, to_allocate);
+    array->allocated = to_allocate;
   }
   array->memory[++array->index] = data;
   array->used = array->used + size;
@@ -73,7 +73,7 @@ int rivulet_array_find_index (RivuletArray *array, void *data, rivulet_array_is_
   return -1;
 }
 
-void variable_length_array_initialize (RivuletArray **array) {
+void rivulet_array_initialize (RivuletArray **array) {
   *array = (RivuletArray *) malloc (sizeof (RivuletArray));
   (*array)->memory = NULL;
   (*array)->allocated = 0;
@@ -81,7 +81,7 @@ void variable_length_array_initialize (RivuletArray **array) {
   (*array)->index = -1;
 }
 
-RivuletArray *variable_length_array_create () {
+RivuletArray *rivulet_array_create () {
   RivuletArray *array = xmalloc (sizeof (RivuletArray));
   array->memory = NULL;
   array->allocated = 0;
