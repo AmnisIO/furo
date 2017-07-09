@@ -5,12 +5,12 @@ int rivulet_array_length (RivuletArray *array) {
 }
 
 int rivulet_array_push (RivuletArray *array, void *data) {
-  size_t toallocate;
+  size_t to_allocate;
   size_t size = sizeof (void *);
   if ((array->allocated - array->used) < size) {
-    toallocate = array->allocated == 0 ? size : (array->allocated * 2);
-    array->memory = realloc (array->memory, toallocate);
-    array->allocated = toallocate;
+    to_allocate = array->allocated == 0 ? size : (array->allocated * 2);
+    array->memory = realloc (array->memory, to_allocate);
+    array->allocated = to_allocate;
   }
   array->memory[++array->index] = data;
   array->used = array->used + size;
