@@ -347,13 +347,6 @@ void test_never () {
   printf ("PASSED\n");
 }
 
-typedef struct NewVariableLengthArray {
-  void **memory;
-  Size allocated;
-  Size used;
-  int index;
-} NewVariableLengthArray;
-
 typedef struct NewRivuletStream {
   Boolean type;
   RivuletProducer *_producer;
@@ -375,11 +368,10 @@ void test_memory () {
   printf ("size of RivuletStream: %d bytes\n", (int) sizeof (RivuletStream));
   printf ("size of RivuletOperator: %d bytes\n", (int) sizeof (RivuletOperator));
   printf ("size of NewRivuletStream: %d bytes\n", (int) sizeof (NewRivuletStream));
-  printf ("size of NewVariableLengthArray: %d bytes\n", (int) sizeof (NewVariableLengthArray));
   printf ("space required to create ByteStream.periodic(): %d bytes\n",
           (int) (sizeof (RivuletProducerPeriodic) + sizeof (RivuletStream) + sizeof (RivuletArray)));
   printf ("space required to create new ByteStream.periodic(): %d bytes\n",
-          (int) (sizeof (RivuletProducerPeriodic) + sizeof (NewRivuletStream) + sizeof (NewVariableLengthArray)));
+          (int) (sizeof (RivuletProducerPeriodic) + sizeof (NewRivuletStream) + sizeof (RivuletArray)));
 }
 
 
