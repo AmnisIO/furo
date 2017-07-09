@@ -1,40 +1,50 @@
 #include "RivuletDrop.h"
+#include "RivuletListenerRegistry.h"
+#include "RivuletProducerRegistry.h"
 
-static void _start (RivuletProducerInternal *self, RivuletListenerInternal *out) {
+static void _start (RivuletProducer *self, RivuletListener *out) {
   RivuletDrop *operator = (RivuletDrop *) self;
   operator->out = (RivuletStream *) out;
   operator->_dropped = 0;
-  operator->in->_add (operator->in, (RivuletListenerInternal *) operator);
+  rivulet_operator_in_add (operator);
 }
 
-static void _stop (RivuletProducerInternal *self) {
+static void _stop (RivuletProducer *self) {
   RivuletDrop *operator = (RivuletDrop *) self;
-  operator->in->_remove (operator->in, (RivuletListenerInternal *) operator);
+  rivulet_operator_in_remove (operator);
   operator->out = NULL;
 }
 
-static void _next (RivuletListenerInternal *self, int value) {
+static void _next (RivuletListener *self, int value) {
   RivuletDrop *operator = (RivuletDrop *) self;
   if (operator->out == NULL) return;
   if (operator->_dropped++ < operator->_to_drop) return;
-  operator->out->_next ((RivuletListenerInternal *) operator->out, value);
+  rivulet_operator_out_next (operator, value);;
 }
 
-static void _complete (RivuletListenerInternal *self) {
+static void _complete (RivuletListener *self) {
   RivuletDrop *operator = (RivuletDrop *) self;
-  operator->out->_complete ((RivuletListenerInternal *) operator->out);
+  rivulet_operator_out_complete (operator);;
 }
 
-RivuletDrop *rivulet_drop_create (RivuletStream *in, int count) {
+static Boolean _registered = 0;
+static RivuletListenerType _listener_type = 0;
+static RivuletProducerType _producer_type = 0;
+
+static void _register () {
+  if (_registered) return;
+  _listener_type = rivulet_listener_registry_register (_next, _complete);
+  _producer_type = rivulet_producer_registry_register (_start, _stop);
+  _registered = 1;
+}
+
+RivuletProducer *rivulet_drop_create (RivuletStream *in, int count) {
   RivuletDrop *operator = xmalloc (sizeof (RivuletDrop));
-  byte_byte_operator_initialize ((RivuletOperator *) operator);
-  operator->operation = RIVULET_OPERATOR_DROP;
+  _register ();
+  operator->listener_type = _listener_type;
+  operator->producer_type = _producer_type;
   operator->in = in;
   operator->_to_drop = count;
-  operator->_start = _start;
-  operator->_stop = _stop;
-  operator->_next = _next;
-  operator->_complete = _complete;
-  return operator;
+  return (RivuletProducer *) operator;
 }
 
