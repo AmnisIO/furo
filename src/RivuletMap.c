@@ -1,6 +1,15 @@
 #include "RivuletMap.h"
 #include "RivuletListenerRegistry.h"
 #include "RivuletProducerRegistry.h"
+#include "RivuletOperator.h"
+
+typedef struct RivuletMap {
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
+  RivuletStream *in;
+  RivuletStream *out;
+  rivulet_map_function map;
+} RivuletMap;
 
 static void _start (RivuletProducer *self, RivuletListener *out) {
   RivuletMap *operator = (RivuletMap *) self;
@@ -34,7 +43,7 @@ static void _register () {
   _registered = 1;
 }
 
-RivuletProducer *rivulet_map_create (RivuletStream *in, rivulet_map_function map) {
+static RivuletProducer *rivulet_map_create (RivuletStream *in, rivulet_map_function map) {
   RivuletMap *operator = xmalloc (sizeof (RivuletMap));
   _register ();
   operator->listener_type = _listener_type;
@@ -42,4 +51,8 @@ RivuletProducer *rivulet_map_create (RivuletStream *in, rivulet_map_function map
   operator->in = in;
   operator->map = map;
   return (RivuletProducer *) operator;
+}
+
+RivuletStream *rivulet_stream_map (RivuletStream *in, rivulet_map_function map) {
+  return rivulet_stream_create (rivulet_map_create (in, map));
 }
