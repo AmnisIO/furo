@@ -4,10 +4,7 @@
 #include "RivuletOperator.h"
 
 typedef struct RivuletFilter {
-  RivuletListenerType listener_type;
-  RivuletProducerType producer_type;
-  RivuletStream *in;
-  RivuletStream *out;
+  RIVULET_OPERATOR_DEFINITION
   rivulet_filter_function filter;
 } RivuletFilter;
 

@@ -4,10 +4,7 @@
 #include "Rivulet.h"
 
 typedef struct RivuletFold {
-  RivuletListenerType listener_type;
-  RivuletProducerType producer_type;
-  RivuletStream *in;
-  RivuletStream *out;
+  RIVULET_OPERATOR_DEFINITION
   rivulet_fold_function fold;
   int accumulated;
   int seed;

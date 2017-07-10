@@ -4,10 +4,7 @@
 #include "RivuletOperator.h"
 
 typedef struct RivuletMapTo {
-  RivuletListenerType listener_type;
-  RivuletProducerType producer_type;
-  RivuletStream *in;
-  RivuletStream *out;
+  RIVULET_OPERATOR_DEFINITION
   int value;
 } RivuletMapTo;
 

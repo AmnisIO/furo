@@ -4,10 +4,7 @@
 #include "RivuletOperator.h"
 
 typedef struct RivuletTake {
-  RivuletListenerType listener_type;
-  RivuletProducerType producer_type;
-  RivuletStream *in;
-  RivuletStream *out;
+  RIVULET_OPERATOR_DEFINITION
   int _to_take;
   int _taken;
 } RivuletTake;

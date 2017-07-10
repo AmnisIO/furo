@@ -3,11 +3,14 @@
 
 #include "RivuletStream.h"
 
-typedef struct RivuletOperator {
-  RivuletListenerType listener_type;
-  RivuletProducerType producer_type;
-  RivuletStream *in;
+#define RIVULET_OPERATOR_DEFINITION   \
+  RivuletListenerType listener_type;  \
+  RivuletProducerType producer_type;  \
+  RivuletStream *in;                  \
   RivuletStream *out;
+
+typedef struct RivuletOperator {
+  RIVULET_OPERATOR_DEFINITION
 } RivuletOperator;
 
 void rivulet_operator_in_add (void *);

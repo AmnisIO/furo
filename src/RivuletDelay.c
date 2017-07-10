@@ -5,10 +5,7 @@
 #include "RivuletOperator.h"
 
 typedef struct RivuletDelay {
-  RivuletListenerType listener_type;
-  RivuletProducerType producer_type;
-  RivuletStream *in;
-  RivuletStream *out;
+  RIVULET_OPERATOR_DEFINITION
   int _delay;
 } RivuletDelay;
 
