@@ -354,8 +354,6 @@ void test_memory () {
           (int) (sizeof (RivuletListener) + sizeof (rivulet_listener_next) + sizeof (rivulet_listener_complete) + sizeof (void *)));
   printf ("size of RivuletStream: %d bytes\n", (int) sizeof (RivuletStream));
   printf ("size of RivuletOperator: %d bytes\n", (int) sizeof (RivuletOperator));
-  printf ("space required to create ByteStream.periodic(): %d bytes\n",
-          (int) (sizeof (RivuletProducerPeriodic) + sizeof (RivuletStream) + sizeof (RivuletArray)));
 }
 
 
