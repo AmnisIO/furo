@@ -20,7 +20,6 @@ typedef struct RivuletStream {
 RivuletStream *rivulet_stream_create (RivuletProducer *producer);
 void rivulet_stream_add_listener (RivuletStream *, RivuletListener *);
 void rivulet_stream_remove_listener (RivuletStream *, RivuletListener *);
-RivuletStream *rivulet_stream_drop (RivuletStream *, int);
 RivuletStream *rivulet_stream_last (RivuletStream *);
 RivuletStream *rivulet_stream_sample (RivuletStream *, RivuletStream *);
 RivuletStream *rivulet_stream_delay (RivuletStream *, int);

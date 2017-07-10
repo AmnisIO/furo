@@ -1,6 +1,16 @@
 #include "RivuletDrop.h"
 #include "RivuletListenerRegistry.h"
 #include "RivuletProducerRegistry.h"
+#include "RivuletOperator.h"
+
+typedef struct RivuletDrop {
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
+  RivuletStream *in;
+  RivuletStream *out;
+  int _to_drop;
+  int _dropped;
+} RivuletDrop;
 
 static void _start (RivuletProducer *self, RivuletListener *out) {
   RivuletDrop *operator = (RivuletDrop *) self;
@@ -38,7 +48,7 @@ static void _register () {
   _registered = 1;
 }
 
-RivuletProducer *rivulet_drop_create (RivuletStream *in, int count) {
+static RivuletProducer *rivulet_drop_create (RivuletStream *in, int count) {
   RivuletDrop *operator = xmalloc (sizeof (RivuletDrop));
   _register ();
   operator->listener_type = _listener_type;
@@ -46,5 +56,9 @@ RivuletProducer *rivulet_drop_create (RivuletStream *in, int count) {
   operator->in = in;
   operator->_to_drop = count;
   return (RivuletProducer *) operator;
+}
+
+RivuletStream *rivulet_stream_drop (RivuletStream *in, int count) {
+  return rivulet_stream_create (rivulet_drop_create (in, count));
 }
 
