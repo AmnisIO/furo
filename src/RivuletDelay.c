@@ -70,23 +70,11 @@ static void _complete (RivuletListener *self) {
   rivulet_timer->set_timeout (_send_complete, delayed_complete_create (operator), operator->_delay);
 }
 
-
-static Boolean _registered = 0;
-static RivuletListenerType _listener_type = 0;
-static RivuletProducerType _producer_type = 0;
-
-static void _register () {
-  if (_registered) return;
-  _listener_type = rivulet_listener_registry_register (_next, _complete);
-  _producer_type = rivulet_producer_registry_register (_start, _stop);
-  _registered = 1;
-}
+RIVULET_OPERATOR_REGISTER_DEFINITION
 
 static RivuletProducer *rivulet_delay_create (RivuletStream *in, int delay) {
   RivuletDelay *operator = xmalloc (sizeof (RivuletDelay));
-  _register ();
-  operator->listener_type = _listener_type;
-  operator->producer_type = _producer_type;
+  RIVULET_OPERATOR_REGISTRATION
   operator->in = in;
   operator->_delay = delay;
   return (RivuletProducer *) operator;
