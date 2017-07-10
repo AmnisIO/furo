@@ -1,6 +1,18 @@
 #include "RivuletSample.h"
 #include "RivuletProducerRegistry.h"
 #include "RivuletListenerRegistry.h"
+#include "RivuletOperator.h"
+
+typedef struct RivuletSample {
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
+  RivuletStream *in;
+  RivuletStream *out;
+  RivuletStream *_to_sample;
+  RivuletListener *_listener;
+  Boolean _has;
+  int _value;
+} RivuletSample;
 
 static Boolean FALSE = 0;
 static Boolean TRUE = 1;
@@ -86,7 +98,7 @@ static void _register () {
   _registered = 1;
 }
 
-RivuletProducer *rivulet_sample_create (RivuletStream *in, RivuletStream *to_sample) {
+static RivuletProducer *rivulet_sample_create (RivuletStream *in, RivuletStream *to_sample) {
   RivuletSample *operator = xmalloc (sizeof (RivuletSample));
   _register ();
   operator->listener_type = _listener_type;
@@ -96,4 +108,8 @@ RivuletProducer *rivulet_sample_create (RivuletStream *in, RivuletStream *to_sam
   operator->_to_sample = to_sample;
   operator->_listener = (RivuletListener *) sample_listener_create (operator);
   return (RivuletProducer *) operator;
+}
+
+RivuletStream *rivulet_stream_sample (RivuletStream *in, RivuletStream *to_sample) {
+  return rivulet_stream_create (rivulet_sample_create (in, to_sample));
 }
