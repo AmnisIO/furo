@@ -1,6 +1,16 @@
 #include "RivuletLast.h"
 #include "RivuletProducerRegistry.h"
 #include "RivuletListenerRegistry.h"
+#include "RivuletOperator.h"
+
+typedef struct RivuletLast {
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
+  RivuletStream *in;
+  RivuletStream *out;
+  Boolean _has;
+  int _value;
+} RivuletLast;
 
 static Boolean FALSE = 0;
 static Boolean TRUE = 1;
@@ -46,7 +56,7 @@ static void _register () {
   _registered = 1;
 }
 
-RivuletProducer *rivulet_last_create (RivuletStream *in) {
+static RivuletProducer *rivulet_last_create (RivuletStream *in) {
   RivuletLast *operator = xmalloc (sizeof (RivuletLast));
   _register ();
   operator->listener_type = _listener_type;
@@ -54,5 +64,9 @@ RivuletProducer *rivulet_last_create (RivuletStream *in) {
   operator->in = in;
   operator->_has = FALSE;
   return (RivuletProducer *) operator;
+}
+
+RivuletStream *rivulet_stream_last (RivuletStream *in) {
+  return rivulet_stream_create (rivulet_last_create (in));
 }
 

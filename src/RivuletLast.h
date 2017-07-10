@@ -1,17 +1,8 @@
 #ifndef RIVULET_LAST_H
 #define RIVULET_LAST_H
 
-#include "RivuletOperator.h"
+#include "RivuletStream.h"
 
-typedef struct RivuletLast {
-  RivuletListenerType listener_type;
-  RivuletProducerType producer_type;
-  RivuletStream *in;
-  RivuletStream *out;
-  Boolean _has;
-  int _value;
-} RivuletLast;
-
-RivuletProducer *rivulet_last_create (RivuletStream *in);
+RivuletStream *rivulet_stream_last (RivuletStream *);
 
 #endif //RIVULET_LAST_H
