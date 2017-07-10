@@ -1,9 +1,15 @@
-#include "RivuletProducerFromArray.h"
+#include "RivuletFromArray.h"
 #include "RivuletProducerRegistry.h"
 #include "RivuletListenerRegistry.h"
 
+typedef struct RivuletFromArray {
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
+  RivuletArray *array;
+} RivuletFromArray;
+
 static void _start (RivuletProducer *self, RivuletListener *listener) {
-  RivuletProducerFromArray *producer = (RivuletProducerFromArray *) self;
+  RivuletFromArray *producer = (RivuletFromArray *) self;
   RivuletArray *array = producer->array;
   int length = rivulet_array_length (array);
   for (int i = 0; i < length; i++) {
@@ -27,8 +33,8 @@ static void _register () {
   _registered = 1;
 }
 
-RivuletProducer *rivulet_producer_from_variable_length_array (RivuletArray *array) {
-  RivuletProducerFromArray *producer = xmalloc (sizeof (RivuletProducerFromArray));
+static RivuletProducer *rivulet_producer_from_variable_length_array (RivuletArray *array) {
+  RivuletFromArray *producer = xmalloc (sizeof (RivuletFromArray));
   producer->array = array;
   _register ();
   producer->listener_type = _listener_type;
@@ -36,8 +42,8 @@ RivuletProducer *rivulet_producer_from_variable_length_array (RivuletArray *arra
   return (RivuletProducer *) producer;
 }
 
-RivuletProducer *rivulet_producer_from_array (int *array, int size) {
-  RivuletProducerFromArray *producer = xmalloc (sizeof (RivuletProducerFromArray));
+static RivuletProducer *rivulet_producer_from_array (int *array, int size) {
+  RivuletFromArray *producer = xmalloc (sizeof (RivuletFromArray));
   rivulet_array_initialize (&(producer->array));
   RivuletArray *varray = producer->array;
   for (int i = 0; i < size; i++) {
@@ -48,3 +54,11 @@ RivuletProducer *rivulet_producer_from_array (int *array, int size) {
   producer->producer_type = _producer_type;
   return (RivuletProducer *) producer;
 }
+
+RivuletStream *rivulet_stream_from_variable_length_array (RivuletArray *array) {
+  return rivulet_stream_create (rivulet_producer_from_variable_length_array (array));
+}
+RivuletStream *rivulet_stream_from_array (int *array, int size) {
+  return rivulet_stream_create (rivulet_producer_from_array (array, size));
+}
+
