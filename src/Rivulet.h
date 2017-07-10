@@ -2,18 +2,15 @@
 #define RIVULET_RIVULET_H
 
 #include "RivuletTimer.h"
-
 #include "RivuletProducerRegistry.h"
-
-#include "RivuletEmpty.h"
-#include "RivuletProducerNever.h"
-#include "RivuletProducerFromArray.h"
-#include "RivuletProducerPeriodic.h"
-
 #include "RivuletListenerRegistry.h"
 
 #include "RivuletStream.h"
 
+#include "RivuletEmpty.h"
+#include "RivuletNever.h"
+#include "RivuletProducerFromArray.h"
+#include "RivuletPeriodic.h"
 #include "RivuletMap.h"
 #include "RivuletMapTo.h"
 #include "RivuletFilter.h"
