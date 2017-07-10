@@ -20,7 +20,7 @@ static void _register () {
   _registered = 1;
 }
 
-RivuletProducer *rivulet_producer_empty_create () {
+static RivuletProducer *rivulet_producer_empty_create () {
   RivuletProducer *producer = xmalloc (sizeof (RivuletProducer));
   _register ();
   producer->listener_type = _listener_type;
