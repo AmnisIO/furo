@@ -1,18 +1,9 @@
 #ifndef RIVULET_FILTER_H
 #define RIVULET_FILTER_H
 
-#include "RivuletOperator.h"
+#include "RivuletStream.h"
 
-typedef Boolean (*rivulet_filter_function) (int value);
-
-typedef struct RivuletFilter {
-  RivuletListenerType listener_type;
-  RivuletProducerType producer_type;
-  RivuletStream *in;
-  RivuletStream *out;
-  rivulet_filter_function filter;
-} RivuletFilter;
-
-RivuletProducer *rivulet_filter_create (RivuletStream *in, rivulet_filter_function filter);
+typedef Boolean (*rivulet_filter_function) (int);
+RivuletStream *rivulet_stream_filter (RivuletStream *, rivulet_stream_filter_function);
 
 #endif //RIVULET_FILTER_H

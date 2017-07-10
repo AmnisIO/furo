@@ -1,6 +1,15 @@
 #include "RivuletFilter.h"
 #include "RivuletListenerRegistry.h"
 #include "RivuletProducerRegistry.h"
+#include "RivuletOperator.h"
+
+typedef struct RivuletFilter {
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
+  RivuletStream *in;
+  RivuletStream *out;
+  rivulet_filter_function filter;
+} RivuletFilter;
 
 static void _start (RivuletProducer *self, RivuletListener *out) {
   RivuletFilter *operator = (RivuletFilter *) self;
@@ -37,7 +46,8 @@ static void _register () {
   _producer_type = rivulet_producer_registry_register (_start, _stop);
   _registered = 1;
 }
-RivuletProducer *rivulet_filter_create (RivuletStream *in, rivulet_filter_function filter) {
+
+static RivuletProducer *rivulet_filter_create (RivuletStream *in, rivulet_filter_function filter) {
   RivuletFilter *operator = xmalloc (sizeof (RivuletFilter));
   _register ();
   operator->listener_type = _listener_type;
@@ -45,4 +55,8 @@ RivuletProducer *rivulet_filter_create (RivuletStream *in, rivulet_filter_functi
   operator->in = in;
   operator->filter = filter;
   return (RivuletProducer *) operator;
+}
+
+RivuletStream *rivulet_stream_filter (RivuletStream *in, rivulet_stream_filter_function filter) {
+  return rivulet_stream_create (rivulet_filter_create (in, filter));
 }
