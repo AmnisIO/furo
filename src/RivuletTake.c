@@ -1,6 +1,16 @@
 #include "RivuletTake.h"
 #include "RivuletListenerRegistry.h"
 #include "RivuletProducerRegistry.h"
+#include "RivuletOperator.h"
+
+typedef struct RivuletTake {
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
+  RivuletStream *in;
+  RivuletStream *out;
+  int _to_take;
+  int _taken;
+} RivuletTake;
 
 static void _start (RivuletProducer *self, RivuletListener *out) {
   RivuletTake *operator = (RivuletTake *) self;
@@ -41,7 +51,7 @@ static void _register () {
   _registered = 1;
 }
 
-RivuletProducer *rivulet_take_create (RivuletStream *in, int count) {
+static RivuletProducer *rivulet_take_create (RivuletStream *in, int count) {
   RivuletTake *operator = xmalloc (sizeof (RivuletTake));
   _register ();
   operator->listener_type = _listener_type;
@@ -50,5 +60,9 @@ RivuletProducer *rivulet_take_create (RivuletStream *in, int count) {
   operator->_to_take = count;
   operator->_taken = 0;
   return (RivuletProducer *) operator;
+}
+
+RivuletStream *rivulet_stream_take (RivuletStream *in, int count) {
+  return rivulet_stream_create (rivulet_take_create (in, count));
 }
 

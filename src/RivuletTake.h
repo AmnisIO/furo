@@ -1,18 +1,8 @@
 #ifndef RIVULET_TAKE_H
 #define RIVULET_TAKE_H
 
+#include "RivuletStream.h"
 
-#include "RivuletOperator.h"
-
-typedef struct RivuletTake {
-  RivuletListenerType listener_type;
-  RivuletProducerType producer_type;
-  RivuletStream *in;
-  RivuletStream *out;
-  int _to_take;
-  int _taken;
-} RivuletTake;
-
-RivuletProducer *rivulet_take_create (RivuletStream *in, int count);
+RivuletStream *rivulet_stream_take (RivuletStream *, int);
 
 #endif //RIVULET_TAKE_H
