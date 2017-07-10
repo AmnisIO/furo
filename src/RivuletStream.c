@@ -1,6 +1,6 @@
 #include "RivuletStream.h"
 #include "RivuletMap.h"
-#include "RivuletProducerPeriodic.h"
+#include "RivuletPeriodic.h"
 #include "RivuletMapTo.h"
 #include "RivuletFilter.h"
 #include "RivuletTake.h"
@@ -10,7 +10,6 @@
 #include "RivuletSample.h"
 #include "RivuletListenerRegistry.h"
 #include "RivuletProducerRegistry.h"
-#include "RivuletProducerNever.h"
 
 int STOP_ID_NONE = 0;
 
@@ -101,55 +100,7 @@ static RivuletStream *_create (RivuletProducer *producer) {
   return stream;
 }
 
-RivuletStream *rivulet_stream_map (RivuletStream *self, rivulet_stream_map_function map) {
-  return _create (rivulet_map_create (self, map));
-}
-
-RivuletStream *rivulet_stream_map_to (RivuletStream *self, int value) {
-  return _create (rivulet_map_to_create (self, value));
-}
-
-RivuletStream *rivulet_stream_filter (RivuletStream *self, rivulet_stream_filter_function filter) {
-  return _create (rivulet_filter_create (self, filter));
-}
-
-RivuletStream *rivulet_stream_take (RivuletStream *self, int count) {
-  return _create (rivulet_take_create (self, count));
-}
-
-RivuletStream *rivulet_stream_drop (RivuletStream *self, int count) {
-  return _create (rivulet_drop_create (self, count));
-}
-
-RivuletStream *rivulet_stream_last (RivuletStream *self) {
-  return _create (rivulet_last_create (self));
-}
-
-RivuletStream *rivulet_stream_delay (RivuletStream *self, int delay) {
-  return _create (byte_delay_create (self, delay));
-}
-
-RivuletStream *rivulet_stream_sample (RivuletStream *self, RivuletStream *to_sample) {
-  return _create (rivulet_sample_create (self, to_sample));
-}
-
 RivuletStream *rivulet_stream_create (RivuletProducer *producer) {
   return _create (producer);
-}
-
-RivuletStream *rivulet_stream_never () {
-  return rivulet_stream_create (rivulet_producer_never_create ());
-}
-
-RivuletStream *rivulet_stream_from_variable_length_array (RivuletArray *array) {
-  return rivulet_stream_create (rivulet_producer_from_variable_length_array (array));
-}
-
-RivuletStream *rivulet_stream_from_array (int *array, int size) {
-  return rivulet_stream_create (rivulet_producer_from_array (array, size));
-}
-
-RivuletStream *rivulet_stream_periodic (int period) {
-  return rivulet_stream_create (rivulet_producer_periodic_create (period));
 }
 
