@@ -1,16 +1,8 @@
 #ifndef RIVULET_DELAY_H
 #define RIVULET_DELAY_H
 
-#include "RivuletOperator.h"
+#include "RivuletStream.h"
 
-typedef struct RivuletDelay {
-  RivuletListenerType listener_type;
-  RivuletProducerType producer_type;
-  RivuletStream *in;
-  RivuletStream *out;
-  int _delay;
-} RivuletDelay;
-
-RivuletProducer *byte_delay_create (RivuletStream *in, int delay);
+RivuletStream *rivulet_stream_delay (RivuletStream *, int);
 
 #endif //RIVULET_DELAY_H

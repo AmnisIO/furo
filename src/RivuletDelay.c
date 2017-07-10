@@ -2,6 +2,15 @@
 #include "RivuletTimer.h"
 #include "RivuletListenerRegistry.h"
 #include "RivuletProducerRegistry.h"
+#include "RivuletOperator.h"
+
+typedef struct RivuletDelay {
+  RivuletListenerType listener_type;
+  RivuletProducerType producer_type;
+  RivuletStream *in;
+  RivuletStream *out;
+  int _delay;
+} RivuletDelay;
 
 static void _start (RivuletProducer *self, RivuletListener *out) {
   RivuletDelay *operator = (RivuletDelay *) self;
@@ -76,7 +85,7 @@ static void _register () {
   _registered = 1;
 }
 
-RivuletProducer *byte_delay_create (RivuletStream *in, int delay) {
+static RivuletProducer *rivulet_delay_create (RivuletStream *in, int delay) {
   RivuletDelay *operator = xmalloc (sizeof (RivuletDelay));
   _register ();
   operator->listener_type = _listener_type;
@@ -84,4 +93,8 @@ RivuletProducer *byte_delay_create (RivuletStream *in, int delay) {
   operator->in = in;
   operator->_delay = delay;
   return (RivuletProducer *) operator;
+}
+
+RivuletStream *rivulet_stream_delay (RivuletStream *in, int delay) {
+  return rivulet_stream_create (rivulet_delay_create (in, delay));
 }
