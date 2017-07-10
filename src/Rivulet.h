@@ -5,7 +5,7 @@
 
 #include "RivuletProducerRegistry.h"
 
-#include "RivuletProducerEmpty.h"
+#include "RivuletEmpty.h"
 #include "RivuletProducerNever.h"
 #include "RivuletProducerFromArray.h"
 #include "RivuletProducerPeriodic.h"

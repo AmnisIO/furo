@@ -11,7 +11,6 @@
 #include "RivuletListenerRegistry.h"
 #include "RivuletProducerRegistry.h"
 #include "RivuletProducerNever.h"
-#include "RivuletProducerEmpty.h"
 
 int STOP_ID_NONE = 0;
 
@@ -140,10 +139,6 @@ RivuletStream *rivulet_stream_create (RivuletProducer *producer) {
 
 RivuletStream *rivulet_stream_never () {
   return rivulet_stream_create (rivulet_producer_never_create ());
-}
-
-RivuletStream *rivulet_stream_empty () {
-  return rivulet_stream_create (rivulet_producer_empty_create ());
 }
 
 RivuletStream *rivulet_stream_from_variable_length_array (RivuletArray *array) {

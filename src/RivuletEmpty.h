@@ -1,8 +1,8 @@
 #ifndef RIVULET_RIVULETPRODUCEREMPTY_H
 #define RIVULET_RIVULETPRODUCEREMPTY_H
 
-#include "RivuletProducer.h"
+#include "RivuletStream.h"
 
-RivuletProducer *rivulet_producer_empty_create();
+RivuletStream *rivulet_stream_empty();
 
 #endif //RIVULET_RIVULETPRODUCEREMPTY_H
