@@ -1,8 +1,4 @@
-#include <RivuletTask.h>
-#include <RivuletTimer.h>
-#include <RivuletProducerPeriodic.h>
-#include <RivuletOperator.h>
-#include "RivuletStream.h"
+#include <Rivulet.h>
 
 RivuletArray *array = NULL;
 RivuletListener *listener = NULL;
