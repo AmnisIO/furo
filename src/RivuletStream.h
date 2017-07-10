@@ -6,7 +6,7 @@
 #include "RivuletArray.h"
 #include "Boolean.h"
 #include "RivuletTimer.h"
-#include "RivuletProducerFromArray.h"
+#include "RivuletFromArray.h"
 
 typedef int (*rivulet_stream_map_function) (int value);
 typedef Boolean (*rivulet_stream_filter_function) (int value);
@@ -20,8 +20,6 @@ typedef struct RivuletStream {
 } RivuletStream;
 
 RivuletStream *rivulet_stream_create (RivuletProducer *producer);
-RivuletStream *rivulet_stream_from_variable_length_array (RivuletArray *array);
-RivuletStream *rivulet_stream_from_array (int *array, int size);
 RivuletStream *rivulet_stream_merge (int count, ...);
 void rivulet_stream_add_listener (RivuletStream *, RivuletListener *);
 void rivulet_stream_remove_listener (RivuletStream *, RivuletListener *);
