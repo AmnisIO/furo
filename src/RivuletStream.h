@@ -20,7 +20,6 @@ typedef struct RivuletStream {
 } RivuletStream;
 
 RivuletStream *rivulet_stream_create (RivuletProducer *producer);
-RivuletStream *rivulet_stream_merge (int count, ...);
 void rivulet_stream_add_listener (RivuletStream *, RivuletListener *);
 void rivulet_stream_remove_listener (RivuletStream *, RivuletListener *);
 RivuletStream *rivulet_stream_map (RivuletStream *, rivulet_stream_map_function);
