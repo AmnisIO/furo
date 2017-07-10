@@ -4,9 +4,8 @@
 #include "RivuletTimer.h"
 #include "RivuletProducerRegistry.h"
 #include "RivuletListenerRegistry.h"
-
 #include "RivuletStream.h"
-
+#include "RivuletOperator.h"
 #include "RivuletEmpty.h"
 #include "RivuletNever.h"
 #include "RivuletFromArray.h"
@@ -19,5 +18,6 @@
 #include "RivuletLast.h"
 #include "RivuletDelay.h"
 #include "RivuletSample.h"
+#include "RivuletFold.h"
 
 #endif //RIVULET_RIVULET_H
