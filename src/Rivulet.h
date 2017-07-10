@@ -9,7 +9,7 @@
 
 #include "RivuletEmpty.h"
 #include "RivuletNever.h"
-#include "RivuletProducerFromArray.h"
+#include "RivuletFromArray.h"
 #include "RivuletPeriodic.h"
 #include "RivuletMap.h"
 #include "RivuletMapTo.h"
