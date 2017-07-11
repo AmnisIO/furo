@@ -1,16 +1,8 @@
 #ifndef RIVULET_MAPTO_H
 #define RIVULET_MAPTO_H
 
-#include "RivuletOperator.h"
+#include "RivuletStream.h"
 
-typedef struct RivuletMapTo {
-  RivuletListenerType listener_type;
-  RivuletProducerType producer_type;
-  RivuletStream *in;
-  RivuletStream *out;
-  int value;
-} RivuletMapTo;
-
-RivuletProducer *rivulet_map_to_create (RivuletStream *in, int value);
+RivuletStream *rivulet_stream_map_to (RivuletStream *, int);
 
 #endif //RIVULET_MAPTO_H

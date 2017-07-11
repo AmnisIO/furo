@@ -1,8 +1,4 @@
-#include <RivuletTask.h>
-#include <RivuletTimer.h>
-#include <RivuletProducerPeriodic.h>
-#include <RivuletOperator.h>
-#include "RivuletStream.h"
+#include <Rivulet.h>
 
 RivuletArray *array = NULL;
 RivuletListener *listener = NULL;
@@ -319,6 +315,28 @@ void test_sample () {
   printf ("PASSED\n");
 }
 
+int sum (int previous, int current) {
+  return previous + current;
+}
+
+void test_fold () {
+  reset ();
+  printf ("TEST RivuletStream.fold()\n");
+  int five_to_eight[4] = {5, 6, 7, 8};
+  RivuletStream *stream = rivulet_stream_from_array (five_to_eight, 4);
+  RivuletStream *stream_fold = rivulet_stream_fold (stream, sum, 0);
+  rivulet_stream_add_listener (stream_fold, listener);
+  int length = rivulet_array_length (array);
+  int expected[5] = {0, 5, 11, 18, 26};
+  for (int i = 0; i < length; i++) {
+    int value = (int) rivulet_array_get (array, i);
+    if (value == expected[i]) continue;
+    printf ("FAILED\n");
+    return;
+  }
+  printf ("PASSED\n");
+}
+
 void test_empty () {
   reset ();
   printf ("TEST RivuletStream.empty()\n");
@@ -358,8 +376,6 @@ void test_memory () {
           (int) (sizeof (RivuletListener) + sizeof (rivulet_listener_next) + sizeof (rivulet_listener_complete) + sizeof (void *)));
   printf ("size of RivuletStream: %d bytes\n", (int) sizeof (RivuletStream));
   printf ("size of RivuletOperator: %d bytes\n", (int) sizeof (RivuletOperator));
-  printf ("space required to create ByteStream.periodic(): %d bytes\n",
-          (int) (sizeof (RivuletProducerPeriodic) + sizeof (RivuletStream) + sizeof (RivuletArray)));
 }
 
 
@@ -376,6 +392,7 @@ int main () {
   test_periodic ();
   test_delay ();
   test_sample ();
+  test_fold ();
   test_empty ();
   test_never ();
   test_memory ();
